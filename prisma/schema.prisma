@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User{
+  id          String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  avatar String?
+
+  created_at DateTime @default(now())
+
+  @@map("users")
+}
+
+model Nota{
+  numero_nota String @unique
+  client String
+  destinatario String
+  endereco_destinatario String
+  cidade String
+  peso String
+  valor_nota String
+  tipo_produto String?
+
+  @@map("notas")
+}
+
+model Frete{
+  id String @unique @default(uuid())
+  frete Int @id @default(autoincrement())
+  data_frete DateTime @default(now())
+  peso Float
+  frete_empresa Int
+  frete_saida_motorista Int
+  quantidade_entregas Int
+  motorista String
+  placa String
+
+  @@map("fretes")
+}
