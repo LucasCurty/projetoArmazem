@@ -20,6 +20,18 @@ export const Container = styled.div`
             justify-content: space-between;
             flex-wrap: wrap;
         }
+        > .divInput{
+        display: flex;
+        align-items: center;
+        width: 92%;
+
+        margin: 0 auto;
+
+        > input[type="file"] {
+            font-family: sans-serif;
+            color: ${({theme})=> theme.COLORS.GRAY_100};
+        }
+    }
 `;
 
 export const Form = styled.form`
@@ -39,3 +51,22 @@ export const Form = styled.form`
         }
     }
 `;
+
+
+export const BtnCadastrarNota = styled.button`
+    background-color: ${({theme})=> theme.COLORS.ORANGE};
+    color: ${({theme})=> theme.COLORS.WHITE};
+    padding: 12px 24px;
+    border-radius: 14px;
+    border:  none;
+
+    float: right;
+    margin: 1rem 0;
+    margin-right: 5rem;
+`;
+
+export const InputXml = styled.input`
+    float: right;
+    margin: 1rem 0;
+    margin-right: 5rem;
+`
