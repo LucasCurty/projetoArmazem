@@ -8,48 +8,43 @@ export const Container = styled.div`
     grid-template-rows: 105px auto;
     grid-template-areas: 
         "header"
-        "content";
-
-        > main {
-            grid-area: content;
-            overflow-y: auto;
-        }
+        "content"
+        "footer";
 
         .tags{
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
         }
-        > .divInput{
-        display: flex;
-        align-items: center;
-        width: 92%;
-
-        margin: 0 auto;
-
-        > input[type="file"] {
-            font-family: sans-serif;
-            color: ${({theme})=> theme.COLORS.GRAY_100};
-        }
-    }
+        
 `;
 
-export const Form = styled.form`
-    max-width: 550px;
-    margin: 38px auto;
-
-    > header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        margin-bottom: 36px;
-
-        a{
-            font-size: 20px;
-            color: ${({theme}) => theme.COLORS.GRAY_100};
-        }
+export const ContentTable = styled.section`
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 92%;
+    height: 70vh;
+    ;
+    
+    margin: 0 auto;
+    >section  button{
+        color: white;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 12px;
     }
+    >div {
+        position: relative;
+        overflow-y: auto;
+       
+    }
+    > input[type="file"] {
+        font-family: sans-serif;
+        color: ${({theme})=> theme.COLORS.GRAY_100};
+    }
+    
 `;
 
 
@@ -70,3 +65,11 @@ export const InputXml = styled.input`
     margin: 1rem 0;
     margin-right: 5rem;
 `
+
+export const Footer = styled.footer`
+    display: absolute;
+    bottom: 0;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+`;

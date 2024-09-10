@@ -1,15 +1,17 @@
 import styled from 'styled-components';
 
-export const Tabela = styled.table`
+export const MyTabela = styled.table`
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 92%;
     margin: 0 auto;
     margin-bottom: 1rem;
 
+    overflow-x: none;
+
     td, th{
         border: 1px solid ${({theme})=> theme.COLORS.BACKGROUND_800};
-        padding: 7px;  
+        padding: 5px;  
     }
 
     tr:nth-child(even){
@@ -22,10 +24,10 @@ export const Tabela = styled.table`
     }
 
     th {
-    padding: 8px;
-    text-align: left;
-    background-color: ${({theme})=> theme.COLORS.ORANGE};
-    color: white;
+        padding: 8px;
+        text-align: left;
+        background-color: ${({theme})=> theme.COLORS.ORANGE};
+        color: white;
     }
 
 `

@@ -1,30 +1,33 @@
-export function Tabela({numero_nota, client, destinatario, endereco_destinatario, cidade, peso, valor_nota}) {
+import { MyTabela } from "./styles";
 
-  return (
-        <Tabela>
+function Head({keys}){
+    return(
         <thead>
             <tr>
-                <th scope="col">Numero NF </th>
-                <th scope="col">Cliente origem</th>
-                <th scope="col">Cliente destino</th>
-                <th scope="col">Endereço cliente</th>
-                <th scope="col">Cidade cliente</th>
-                <th scope="col">Peso total da NF</th>
-                <th scope="col">Valor total da NF</th>
+                {keys.map(key => <th key={key}>{key}</th>)}
             </tr>
         </thead>
+    )
+}
+
+function Row({line}){
+    const keys = Object.keys(line)
+
+    return(
+        <tr key={line +1}>
+            {keys.map(key => <td key={key}>{line[key]}</td>)}
+        </tr>
+    )
+}
+export function Tabela({ data }) {
+    const keys = Object.keys(data[0])
+  return (
+        <MyTabela>
+        <Head keys={keys}/>
         <tbody>
-            <tr>
-                    <td><strong>{numero_nota}</strong></td>
-                    <td>{client}</td>
-                    <td>{destinatario}</td>
-                    <td>{endereco_destinatario}</td>
-                    <td>{cidade}</td>
-                    <td>{peso}</td>
-                    <td>{valor_nota}</td>
-            </tr>
+            { data.map(line=> <Row line={line}/>)}
         </tbody>
-        </Tabela>
+        </MyTabela>
   );
 }
 

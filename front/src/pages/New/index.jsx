@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Header } from '../../Components/Header'
 import { Tabela } from '../../Components/Tabela'
-
-import { Container,BtnCadastrarNota,InputXml } from "./styles"
+import { Parser } from 'xml2js'
+import { Container,BtnCadastrarNota,InputXml, ContentTable, Footer } from "./styles"
 import { api } from '../../services/api';
+import { Button } from '../../Components/Button';
 
 export function New(){   
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -23,13 +24,14 @@ export function New(){
           console.log("Algum outro erro!")
       })
   }
-  
+
   function handleConvert(){
       for (let i = 0; i < selectedFiles.length; i++) {
           const file = selectedFiles[i];
           const reader = new FileReader();
           reader.onload = (e) => {
-              parseString(e.target.result, (err, result) => {
+            const parser = new Parser();
+                parser.parseString(e.target.result, (err, result) => {
                   if (err) {
                       console.error(err);
                   } else {
@@ -40,7 +42,8 @@ export function New(){
                           endereco_destinatario: result.nfeProc.NFe[0].infNFe[0].dest[0].enderDest[0].xLgr[0],
                           cidade: String(result.nfeProc.NFe[0].infNFe[0].dest[0].enderDest[0].xMun[0]).toUpperCase(),
                           peso: result.nfeProc.NFe[0].infNFe[0].transp[0].vol[0].pesoB[0],
-                          valor_nota: result.nfeProc.NFe[0].infNFe[0].cobr[0].fat[0].vOrig[0],
+                          valor_nota: result.nfeProc.NFe[0].infNFe[0].total[0].ICMSTot[0].vNF[0],
+                         
                       }])
                   }
               });
@@ -52,22 +55,31 @@ export function New(){
     return(
         <Container>
             <Header/>
-            <div className='divInput'>
-                <BtnCadastrarNota onClick={handleConvert}>Gerar arquivos</BtnCadastrarNota>
-                <InputXml 
-                    type="file"
-                    multiple
-                    accept='.xml'
-                    onChange={handleFileSelect} 
-                    />
-             </div>
-             {objXML.map((nota,index)=>(
-                <Tabela {...nota} />
-               ))
-            }
-        
-
-            <BtnCadastrarNota onClick={()=>handleSendNotas(objXML)}>Cadastrar Notas</BtnCadastrarNota>
+            <ContentTable>
+                <section>
+                    <InputXml 
+                        type="file"
+                        multiple
+                        accept='.xml'
+                        onChange={handleFileSelect} 
+                        />
+                    <Button
+                        title="Gerar arquivos"
+                        onClick={handleConvert}
+                        />
+                </section>
+                <div>
+                {
+                    !objXML ?
+                    <div>Carregando...</div>
+                    :
+                    <Tabela data={objXML}/>
+                }
+                </div>
+            </ContentTable>
+            <Footer>
+             <BtnCadastrarNota onClick={()=>handleSendNotas(objXML)}>Cadastrar Notas</BtnCadastrarNota>
+            </Footer>
             
         </Container>
     )

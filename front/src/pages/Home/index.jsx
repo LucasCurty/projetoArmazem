@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { FiPlus } from "react-icons/fi";
 import { api } from "../../services/api";
 
-import { Container, Brand, Menu, Content, NewNote} from './styles';
+import { Container, Brand, Menu, Content, NewNote, Search} from './styles';
 
 import { Header } from '../../Components/Header';
 import { Section } from '../../Components/Section';
+import { Button } from "../../Components/Button";
 
 export function Home(){
     const [notas, setNotas] = useState([])
@@ -29,8 +30,11 @@ export function Home(){
             <Menu>
             </Menu>
             <Content>
+                
+                <Button 
+                    title="Buscar Notas"
+                    />
                 <Section title="Minhas Notas">
-                    {console.log(notas)}
                     <table id="customers">
                     <thead>
                         <tr>
