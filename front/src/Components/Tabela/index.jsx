@@ -14,13 +14,13 @@ function Row({line}){
     const keys = Object.keys(line)
 
     return(
-        <tr key={line +1}>
+        <tr key={line}>
             {keys.map(key => <td key={key}>{line[key]}</td>)}
         </tr>
     )
 }
 export function Tabela({ data }) {
-    const keys = Object.keys(data[0])
+    const keys = ["NUMERO_NF", "CLIENTE","DESTINATARIO", "ENDERECO_DESTINATARIO","CIDADE", "PESO","VALOR_NF"]
   return (
         <MyTabela>
         <Head keys={keys}/>

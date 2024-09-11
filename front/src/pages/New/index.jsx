@@ -1,8 +1,14 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Parser } from 'xml2js'
+
 import { Header } from '../../Components/Header'
 import { Tabela } from '../../Components/Tabela'
-import { Parser } from 'xml2js'
+
 import { Container,BtnCadastrarNota,InputXml, ContentTable, Footer } from "./styles"
+import { FiArrowLeft } from "react-icons/fi";
+
+
 import { api } from '../../services/api';
 import { Button } from '../../Components/Button';
 
@@ -16,7 +22,10 @@ export function New(){
   
   async function handleSendNotas(data){
      await api.post("notas", data)
-      .then(console.log(data))
+      .then(
+        alert(`Notas cadastradas com sucesso!`),
+        setObjXML([]),
+      )
       .catch(error =>{
           if (error){
               console.log(`Erro encontrado: ${error}`)
@@ -70,14 +79,14 @@ export function New(){
                 </section>
                 <div>
                 {
-                    !objXML ?
-                    <div>Carregando...</div>
-                    :
-                    <Tabela data={objXML}/>
+                    objXML && <Tabela data={objXML}/>
                 }
                 </div>
             </ContentTable>
             <Footer>
+                <Link to='/'>
+                    <FiArrowLeft />
+                </Link>
              <BtnCadastrarNota onClick={()=>handleSendNotas(objXML)}>Cadastrar Notas</BtnCadastrarNota>
             </Footer>
             

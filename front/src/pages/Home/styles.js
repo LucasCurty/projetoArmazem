@@ -10,7 +10,7 @@ export const Container = styled.div`
     grid-template-rows: 105px 128px auto 64px;
     grid-template-areas: 
     "brand header"
-    "menu search"
+    "menu content"
     "menu content"
     "newnote content";
 
@@ -42,15 +42,15 @@ export const Menu = styled.ul`
     padding-top: 64px;
     text-align: center;
 
+    display: flex;
+    flex-direction: column;
+    
+
     > li{
         margin-bottom: 24px;
     }
 `;
-export const Search = styled.div`
-    grid-area: search;
-    padding: 64px 64px 0;
 
-`;
 
 export const Content = styled.div`
     grid-area: content;

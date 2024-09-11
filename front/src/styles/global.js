@@ -5,6 +5,18 @@ export default createGlobalStyle`
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+
+        ::-webkit-scrollbar{
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: ${({theme}) => theme.COLORS.BACKGROUND_900};        /* color of the tracking area */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: ${({theme}) => theme.COLORS.ORANGE};    /* color of the scroll thumb */
+            border-radius: 20px;       /* roundness of the scroll thumb */
+            border: 3px solid ${({theme}) => theme.COLORS.BACKGROUND_800};  /* creates padding around scroll thumb */
+        }
     }
     body{
         background-color:${({theme}) => theme.COLORS.BACKGROUND_800};
@@ -30,5 +42,7 @@ export default createGlobalStyle`
     ul{
         list-style: none;
     }
+
+
 
 `;

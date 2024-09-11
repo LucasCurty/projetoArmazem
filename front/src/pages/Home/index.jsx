@@ -1,26 +1,39 @@
 import { useState, useEffect } from "react";
+
 import { FiPlus } from "react-icons/fi";
 import { api } from "../../services/api";
 
-import { Container, Brand, Menu, Content, NewNote, Search} from './styles';
+import { Tabela } from '../../Components/Tabela'
+
+import { Container, Brand, Menu, Content, NewNote} from './styles';
 
 import { Header } from '../../Components/Header';
+import { ButtonText } from '../../Components/ButtonText'
 import { Section } from '../../Components/Section';
-import { Button } from "../../Components/Button";
 
 export function Home(){
+    const [clients, setClients] = useState([]);
     const [notas, setNotas] = useState([])
  
+
+    
 
     useEffect(()=>{
         async function fetchNotes(){
             const response = await api.get(`/notas`)
             setNotas(response.data);
+            
         }
 
         fetchNotes();
     },[])
 
+    useEffect(()=>{
+         notas.map(item => setClients(prevState => [...prevState,item.client]))
+            
+    },[notas])
+
+    
     return(
         <Container>
             <Brand>
@@ -28,40 +41,25 @@ export function Home(){
             </Brand>
             <Header />
             <Menu>
+            <li><ButtonText title="Todos"/></li>
+                {
+                clients &&
+               
+                  clients.map((client, index) => (
+                    <li key={String(index)}>
+                        <ButtonText isActive title={client}/>
+                    </li>
+
+                  ))
+                }
+                <li><ButtonText title="Teste - 3"/></li>
             </Menu>
             <Content>
-                
-                <Button 
-                    title="Buscar Notas"
-                    />
                 <Section title="Minhas Notas">
-                    <table id="customers">
-                    <thead>
-                        <tr>
-                            <th scope="col">Numero NF </th>
-                            <th scope="col">Cliente origem</th>
-                            <th scope="col">Cliente destino</th>
-                            <th scope="col">Endereço cliente</th>
-                            <th scope="col">Cidade cliente</th>
-                            <th scope="col">Peso total da NF</th>
-                            <th scope="col">Valor total da NF</th>
-                        </tr>
-                    </thead>                    
-                    <tbody>
-                    {notas.map((nota,index)=>(
-                        <tr key={index}>
-                            <td><strong>{nota.numero_nota}</strong></td>
-                            <td>{nota.cliente}</td>
-                            <td>{nota.cidade}</td>
-                            <td>{nota.destinatario}</td>
-                            <td>{nota.endereco_destinatario}</td>
-                            <td>{nota.peso}</td>
-                            <td>{nota.valor_nota}</td>
-                        </tr>
-                    ))
-                }
-                    </tbody>
-                </table>
+                    
+                  
+                    <Tabela  data={notas}/>
+                  
                 </Section>
             </Content>
             <NewNote to="/new">

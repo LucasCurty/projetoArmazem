@@ -55,9 +55,7 @@ export const BtnCadastrarNota = styled.button`
     border-radius: 14px;
     border:  none;
 
-    float: right;
-    margin: 1rem 0;
-    margin-right: 5rem;
+   
 `;
 
 export const InputXml = styled.input`
@@ -67,9 +65,16 @@ export const InputXml = styled.input`
 `
 
 export const Footer = styled.footer`
-    display: absolute;
-    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4rem;
     border-top-width: 1px;
     border-top-style: solid;
     border-top-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+
+    svg {
+            color: ${({theme}) => theme.COLORS.GRAY_100};
+            font-size: 24px;
+        }
 `;
