@@ -11,4 +11,5 @@ export class UserDTO {
     name: string;
 
     avatar?: string
+    oldPassword?: string
 }

@@ -29,7 +29,7 @@ export default createGlobalStyle`
         font-size: 16px;
         outline: none;
     }
-    a{
+    a {
         text-decoration: none;
     }
     button, a {
@@ -39,7 +39,7 @@ export default createGlobalStyle`
     button:houver, a:houver {   
         filter: brightness(0.9);
     }
-    ul{
+    ul, nav{
         list-style: none;
     }
 

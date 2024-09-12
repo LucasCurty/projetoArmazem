@@ -5,34 +5,24 @@ import { api } from "../../services/api";
 
 import { Tabela } from '../../Components/Tabela'
 
-import { Container, Brand, Menu, Content, NewNote} from './styles';
+import { Container, Brand, Content, NewNote} from './styles';
 
 import { Header } from '../../Components/Header';
-import { ButtonText } from '../../Components/ButtonText'
 import { Section } from '../../Components/Section';
+import { Menu } from "../../Components/Menu";
+
 
 export function Home(){
-    const [clients, setClients] = useState([]);
     const [notas, setNotas] = useState([])
- 
-
-    
 
     useEffect(()=>{
         async function fetchNotes(){
             const response = await api.get(`/notas`)
             setNotas(response.data);
-            
         }
 
         fetchNotes();
     },[])
-
-    useEffect(()=>{
-         notas.map(item => setClients(prevState => [...prevState,item.client]))
-            
-    },[notas])
-
     
     return(
         <Container>
@@ -40,20 +30,8 @@ export function Home(){
                 <h1>Operação Lucio</h1>
             </Brand>
             <Header />
-            <Menu>
-            <li><ButtonText title="Todos"/></li>
-                {
-                clients &&
-               
-                  clients.map((client, index) => (
-                    <li key={String(index)}>
-                        <ButtonText isActive title={client}/>
-                    </li>
-
-                  ))
-                }
-                <li><ButtonText title="Teste - 3"/></li>
-            </Menu>
+            {/* <Menu /> */}
+                
             <Content>
                 <Section title="Minhas Notas">
                     
@@ -64,7 +42,7 @@ export function Home(){
             </Content>
             <NewNote to="/new">
                 <FiPlus />
-                Criar nota
+                Cadastrar Notas
             </NewNote>
         </Container>
     );
