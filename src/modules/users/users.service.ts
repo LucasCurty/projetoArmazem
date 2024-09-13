@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
 import { UserDTO } from './users.dto';
-import { hash, compare } from 'bcrypt';
+import {compare, hash} from 'bcrypt';
 @Injectable()
 export class UsersService {
     constructor(private prisma: PrismaService){}
@@ -34,6 +34,12 @@ export class UsersService {
         return await this.prisma.user.findMany();
     }
 
+    async findUser(id:string){
+        return this.prisma.user.findUnique({
+            where:{id}
+        })
+    }
+
     async updateUser(id:string, data:UserDTO){
         const userExist = await this.prisma.user.findUnique({
             where:{
@@ -58,30 +64,27 @@ export class UsersService {
         }
 
         if(data.password && data.oldPassword){
-            const checkOldPassword = await compare(data.oldPassword, userExist.password);
+            const checkOldPassword = await compare(data.oldPassword, userExist.password)
             
-
             if(!checkOldPassword){
-                return console.log(checkOldPassword)
-                // throw new Error("Senhas não conferem!");
+                throw new Error("Senhas não conferem!");
             }
 
-            // data.password = await hash(data.password, 8);
+            data.password = await hash(data.password, 8);
             
         }
 
-        return data
-        // return await this.prisma.user.update({
-        //     data:{
-        //         name:data.name,
-        //         email: data.email,
-        //         password: data.password,
-        //         avatar:data.avatar
-        //     },
-        //     where:{
-        //         id
-        //     }
-        // })
+        return await this.prisma.user.update({
+            data:{
+                name:data.name,
+                email: data.email,
+                password: data.password,
+                avatar:data.avatar
+            },
+            where:{
+                id
+            }
+        })
     }
 
     async deleteUser(id: string){
