@@ -9,11 +9,10 @@ function AuthProvaider({children}){
 
     async function signIn({email, password}) {
         try{
-            const response = await api.post('sessions', {email, password});
-            const {user, token} = response.data;
-
-            localStorage.setItem("@OpeLucio:user", JSON.stringify(user));
-            localStorage.setItem("@OpeLucio:token", token);
+            const response = await api.post('auth', {email, password});
+            const { user, token} = response.data;
+            localStorage.setItem("@ProjetoArmazem:user", JSON.stringify(user));
+            localStorage.setItem("@ProjetoArmazem:token", token);
 
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             setData({user,token})
@@ -30,8 +29,8 @@ function AuthProvaider({children}){
     }
 
     function signOut(){
-        localStorage.removeItem("@OpeLucion:token")
-        localStorage.removeItem("@OpeLucion:user")
+        localStorage.removeItem("@ProjetoArmazem:token")
+        localStorage.removeItem("@ProjetoArmazem:user")
 
         setData({});
     }
@@ -62,8 +61,8 @@ function AuthProvaider({children}){
     }
 
     useEffect(()=>{
-        const token =  localStorage.getItem("@OpeLucio:token")
-        const user =  localStorage.getItem("@OpeLucio:user")
+        const token =  localStorage.getItem("@ProjetoArmazem:token")
+        const user =  localStorage.getItem("@ProjetoArmazem:user")
 
         if(token && user){
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;

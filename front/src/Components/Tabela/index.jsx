@@ -3,8 +3,8 @@ import { MyTabela } from "./styles";
 function Head({keys}){
     return(
         <thead>
-            <tr>
-                {keys.map(key => <th key={key}>{key}</th>)}
+            <tr key={String(keys)}>
+                {keys?.map(key => <th key={key}>{key}</th>)}
             </tr>
         </thead>
     )
@@ -19,13 +19,12 @@ function Row({line}){
         </tr>
     )
 }
-export function Tabela({ data }) {
-    const keys = ["NUMERO_NF", "CLIENTE","DESTINATARIO", "ENDERECO_DESTINATARIO","CIDADE", "PESO","VALOR_NF"]
+export function Tabela({ data, customKeys }) {
   return (
         <MyTabela>
-        <Head keys={keys}/>
+        <Head keys={customKeys}/>
         <tbody>
-            { data.map(line=> <Row line={line}/>)}
+            { data?.map(line=> <Row line={line}/>)}
         </tbody>
         </MyTabela>
   );

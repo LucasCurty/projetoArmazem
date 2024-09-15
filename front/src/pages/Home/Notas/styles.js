@@ -17,27 +17,6 @@ export const Container = styled.div`
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_800};
 `;
 
-export const Menu = styled.nav`
-    grid-area: menu;
-
-    background:  ${({theme}) => theme.COLORS.BACKGROUND_900};
-    padding-top: 64px;
-    padding-right: 2rem;
-    text-align: end;
-
-    display: flex;
-    flex-direction: column;
-
-    > a{
-        margin-bottom: 24px;
-        color: white;
-        
-        :hover{
-            color: ${({theme}) => theme.COLORS.ORANGE};
-        }
-    }
-`;
-
 export const Brand = styled.div`
     grid-area: brand;
 
@@ -56,6 +35,27 @@ export const Brand = styled.div`
         color:  ${({theme}) => theme.COLORS.ORANGE};
     }
     `;
+export const Menu = styled.nav`
+    grid-area: menu;
+
+    background:  ${({theme}) => theme.COLORS.BACKGROUND_900};
+    padding-top: 64px;
+    padding-right: 2rem;
+    text-align: end;
+
+    display: flex;
+    flex-direction: column;
+    
+
+    > a{
+        margin-bottom: 24px;
+        color: white;
+        
+        :hover{
+            color: ${({theme}) => theme.COLORS.ORANGE};
+        }
+    }
+`;
 
 
 export const Content = styled.div`

@@ -1,28 +1,23 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import { FiPlus } from "react-icons/fi";
-import { api } from "../../services/api";
-
-import { Tabela } from '../../Components/Tabela'
-
-import { Container, Brand, Content, NewNote} from './styles';
+import { Container, Brand,Menu, Content, NewNote} from './styles';
 
 import { Header } from '../../Components/Header';
-import { Section } from '../../Components/Section';
-import { Menu } from "../../Components/Menu";
+import { ButtonText } from '../../Components/ButtonText'
+
+import {LancamentoFrete} from './LancamentoFrete'
+import {Gerenciamento} from './Gerenciamento'
+import {Notas} from './Notas'
 
 
 export function Home(){
-    const [notas, setNotas] = useState([])
+    const [sectionActive, setSectionActive] = useState('Lançamento de Frete')
 
-    useEffect(()=>{
-        async function fetchNotes(){
-            const response = await api.get(`/notas`)
-            setNotas(response.data);
-        }
-
-        fetchNotes();
-    },[])
+    function handleChangeSection(sectionSelected){
+        setSectionActive(sectionSelected)
+    }
     
     return(
         <Container>
@@ -30,15 +25,38 @@ export function Home(){
                 <h1>Operação Lucio</h1>
             </Brand>
             <Header />
-            {/* <Menu /> */}
-                
+            <Menu>
+                <Link >
+                    <ButtonText  
+                        onClick={(e)=>handleChangeSection(e.target.innerText)} 
+                        title="Lançamento de Frete" 
+                        isActive={sectionActive === 'Lançamento de Frete'}
+                    />
+                        
+                </Link>
+                <Link>
+                    <ButtonText 
+                        onClick={(e)=>handleChangeSection(e.target.innerText)} 
+                        title="Gerenciamento"
+                        isActive={sectionActive === "Gerenciamento"}
+                    />
+                </Link>
+                <Link>
+                    <ButtonText 
+                        onClick={(e)=>handleChangeSection(e.target.innerText)} 
+                        title="Notas"
+                        isActive={sectionActive === "Notas"}
+                    />
+                </Link>
+            </Menu>
             <Content>
-                <Section title="Minhas Notas">
-                    
-                  
-                    <Tabela  data={notas}/>
-                  
-                </Section>
+               
+                {sectionActive === "Lançamento de Frete" && <LancamentoFrete />}
+                
+                {sectionActive === "Gerenciamento" && <Gerenciamento/>}
+
+                {sectionActive === "Notas" && <Notas />}
+                
             </Content>
             <NewNote to="/new">
                 <FiPlus />

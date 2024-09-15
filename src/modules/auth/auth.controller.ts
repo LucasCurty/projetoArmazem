@@ -8,14 +8,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post(':id')
-  signIn(@Param('id') id:string, @Body() data: UserDTO){
-    return this.authService.signIn(id,data.password)
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  getProfile(@Request() req: any) {
-    return req.user;
+  @Post()
+  async signIn(@Body() data: UserDTO){
+    return await this.authService.signIn(data)
   }
 }

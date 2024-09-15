@@ -17,7 +17,10 @@ import {
       const request = context.switchToHttp().getRequest();
       const token = this.extractTokenFromHeader(request);
       if (!token) {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException({
+          "message": "Usuario sem acesso!!",
+          "error": "Permissão negada! favor, verificar com o administrador",
+        });
       }
       try {
         const payload = await this.jwtService.verifyAsync(
@@ -30,7 +33,10 @@ import {
         
         request['user'] = payload;
       } catch {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException({
+          "message": "Alguma coisa essada aconteceu!",
+          "error": "Verifique com seu administrador",
+        });
       }
       return true;
     }
