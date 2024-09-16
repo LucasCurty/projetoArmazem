@@ -15,7 +15,7 @@ function Row({line}){
 
     return(
         <tr key={line}>
-            {keys.map(key => <td key={key}>{line[key]}</td>)}
+            {keys.map(key => <td key={key}> {line[key]}</td>)}
         </tr>
     )
 }

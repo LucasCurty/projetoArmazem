@@ -15,6 +15,7 @@ export const Container = styled.div`
     "newnote content";
 
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_800};
+
 `;
 
 export const Menu = styled.nav`
@@ -62,6 +63,7 @@ export const Content = styled.div`
     grid-area: content;
     padding: 0 64px;
     overflow-y: auto;
+    font-size: .8rem;
 `;
 
 export const NewNote = styled(Link)`

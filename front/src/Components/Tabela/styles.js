@@ -3,10 +3,7 @@ import styled from 'styled-components';
 export const MyTabela = styled.table`
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 92%;
-    margin: 0 auto;
-    margin-bottom: 1rem;
-
+    width: 100%;
     overflow-x: none;
 
     td, th{
