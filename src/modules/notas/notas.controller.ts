@@ -18,13 +18,13 @@ export class NotasController {
     return this.notasService.findAllNotas();
   }
 
-  @Put(":numero_nota")
-  async update(@Param("numero_nota") numero_nota:string, @Body() data: NotasDTO){
-    return this.notasService.updateNota(numero_nota,data);
+  @Put(":id")
+  async update(@Param("id") id:number, @Body() data: NotasDTO){
+    return this.notasService.updateNota(id,data);
   }
 
-  @Delete(":numero_nota")
-  async delete(@Param("numero_nota") numero_nota:string){
-    return this.notasService.deleteNota(numero_nota)
+  @Delete(":id")
+  async delete(@Param("id") id:number){
+    return this.notasService.deleteNota(id)
   }
 }

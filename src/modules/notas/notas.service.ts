@@ -8,10 +8,11 @@ export class NotasService {
     constructor(private prisma: PrismaService){}
 
     async createNota(data: NotasDTO[]){
-
+        
         return await this.prisma.nota.createMany({
             data
         })
+
         .then(res => {
             console.log(`Tudo deu certo, cadastrado com sucesso: [${res}]`)
         })
@@ -21,13 +22,18 @@ export class NotasService {
 
     }
     async findAllNotas(){
-        return await this.prisma.nota.findMany();
+        const notas = await this.prisma.nota.findMany({
+            include:{
+                frete:true
+            }
+        });
+        return notas
     }
 
-    async updateNota(numero_nota:string, data:NotasDTO){
+    async updateNota(id: number, data:NotasDTO){
         const notaExist = await this.prisma.nota.findUnique({
             where:{
-                numero_nota
+                id
             }
         })
 
@@ -38,15 +44,15 @@ export class NotasService {
         return await this.prisma.nota.update({
             data,
             where:{
-                numero_nota
+                id
             }
         })
     }
 
-    async deleteNota(numero_nota: string){
+    async deleteNota(id:number){
         const userExist = await this.prisma.nota.findUnique({
             where:{
-                numero_nota,
+                id,
             }
         })
 
@@ -56,7 +62,7 @@ export class NotasService {
 
         return await this.prisma.nota.delete({
             where:{
-                numero_nota
+                id
             }
         })
     }

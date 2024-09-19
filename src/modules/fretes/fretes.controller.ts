@@ -20,12 +20,12 @@ export class FretesController {
   }
 
   @Put(":id")
-  async update(@Param("id") id:string, @Body() data: FreteDTO){
+  async update(@Param("id") id:number, @Body() data: FreteDTO){
     return this.fretesService.updateFrete(id,data);
   }
 
   @Delete(":id")
-  async delete(@Param("id") id:string){
+  async delete(@Param("id") id:number){
     return this.fretesService.deleteFrete(id)
   }
 }
