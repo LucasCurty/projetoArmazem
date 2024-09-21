@@ -3,7 +3,9 @@
 /node_modules
 /build
 front/node_modules
-prisma/dev.db
+
+
+# prisma
 
 # Logs
 logs

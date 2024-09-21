@@ -59,7 +59,7 @@ export const Labels = styled.div`
 `;
 
 export const Tbody = styled.tbody`
-    display: flex;
+    display: none;
     overflow-x: scroll;
     position: relative;
 

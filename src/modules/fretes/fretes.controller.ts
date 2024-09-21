@@ -2,6 +2,7 @@ import { Controller, Post,Get, Put, Delete, Body, Param, HttpCode, UseGuards } f
 import { FretesService } from './fretes.service';
 import { FreteDTO } from './fretes.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { motoristaDTO } from '../motoristas/motorista.dto';
 
 @Controller('fretes')
 @UseGuards(AuthGuard('jwt'))
@@ -10,8 +11,8 @@ export class FretesController {
 
   @Post()
   @HttpCode(204)
-  async create(@Body() data: FreteDTO){
-    return this.fretesService.createFrete(data);
+  async create(@Body() data: FreteDTO, motorista: motoristaDTO){
+    return this.fretesService.createFrete(data, motorista);
   }
 
   @Get()
@@ -21,11 +22,11 @@ export class FretesController {
 
   @Put(":id")
   async update(@Param("id") id:number, @Body() data: FreteDTO){
-    return this.fretesService.updateFrete(id,data);
+    return this.fretesService.updateFrete(+id,data);
   }
 
   @Delete(":id")
   async delete(@Param("id") id:number){
-    return this.fretesService.deleteFrete(id)
+    return this.fretesService.deleteFrete(+id)
   }
 }

@@ -1,114 +1,25 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Section } from '../../../Components/Section';
 import { Tabela } from '../../../Components/Tabela';
 
 import {Tbody , Labels, Frete, TheadBody , DivTr} from './styles'
 
+import { api } from '../../../services/api'
+
 export function LancamentoFrete(){
-    const [moto, setMoto] = useState("Informe a placa")
+    const [moto, setMoto] = useState([])
     const [nota, setNota] = useState([])
     const [freteEmpresa, setFreteEmpresa] = useState('')
     const [freteSaidaMoto, setFreteSaidaMoto] = useState('')
-    const [fretes, SetFretes] = useState([])
-
-    const keysHeadTable = ["NUMERO_NF", "CLIENTE","DESTINATARIO", "ENDERECO_DESTINATARIO","CIDADE", "PESO","VALOR_NF", "TIPO_PRODUTO"]
-
-    const notasSelected = [
-        {
-            "numero_nota": "5588",
-            "client": "TIROL",
-            "destinatario": "HUMBERTO",
-            "endereco_destinatario": "roberto conceição 215",
-            "cidade": "CAMBE",
-            "peso": "1.75",
-            "valor_nota": "25.9",
-            "tipo_produto": "FRIO"
-        },{
-            "numero_nota": "5588",
-            "client": "TIROL",
-            "destinatario": "HUMBERTO",
-            "endereco_destinatario": "roberto conceição 215",
-            "cidade": "CAMBE",
-            "peso": "1.75",
-            "valor_nota": "25.9",
-            "tipo_produto": "FRIO"
-        },{
-            "numero_nota": "5588",
-            "client": "TIROL",
-            "destinatario": "HUMBERTO",
-            "endereco_destinatario": "roberto conceição 215",
-            "cidade": "CAMBE",
-            "peso": "1.75",
-            "valor_nota": "25.9",
-            "tipo_produto": "FRIO"
-        },{
-            "numero_nota": "5588",
-            "client": "TIROL",
-            "destinatario": "HUMBERTO",
-            "endereco_destinatario": "roberto conceição 215",
-            "cidade": "CAMBE",
-            "peso": "1.75",
-            "valor_nota": "25.9",
-            "tipo_produto": "FRIO"
-        },{
-            "numero_nota": "5588",
-            "client": "TIROL",
-            "destinatario": "HUMBERTO",
-            "endereco_destinatario": "roberto conceição 215",
-            "cidade": "CAMBE",
-            "peso": "1.75",
-            "valor_nota": "25.9",
-            "tipo_produto": "FRIO"
-        },
-        {
-            "numero_nota": "7788",
-            "client": "AUROA",
-            "destinatario": "RUA DA RUA",
-            "endereco_destinatario": "roberto conceição 215",
-            "cidade": "CAMBE",
-            "peso": "1.75",
-            "valor_nota": "25.9",
-            "tipo_produto": "FRIO"
-        },
-        {
-            "numero_nota": "570051",
-            "client": "LACTOBOM",
-            "destinatario": "S R C RODRIGUES & CIA LTDA",
-            "endereco_destinatario": "AVENIDA PINHO ARAUCARIA",
-            "cidade": "APUCARANA",
-            "peso": "151.404",
-            "valor_nota": "592.89",
-            "tipo_produto": "null"
-        },
-        {
-            "numero_nota": "570053",
-            "client": "LACTOBOM",
-            "destinatario": "GROU COMERCIO DE ALIMENTOS LTDA",
-            "endereco_destinatario": "RUA PONTA GROSSA",
-            "cidade": "APUCARANA",
-            "peso": "21.816",
-            "valor_nota": "339.72",
-            "tipo_produto": "null"
-        }
-    ]
+    const [frete, SetFrete] = useState({})
+    const [motoristas, setMotoristas] = useState([])
+    const [notasFrete, setNotasFrete] = useState([])
 
 
-    const motoristas = [
-        {   
-            name:"Lucas",
-            placa:'ABC-123'
-        },
-        {   
-            name:"Tiago",
-            placa:'DEF-456'
-        },
-        {   
-            name:"Joao",
-            placa:'GHI-789'
-        },
-    ]
-    
+
+    const [fetchMotorista, setFetchMotorista] = useState([])
+
     function selectMotorista(event){
         let encontrado = motoristas.find((element)=> event === element.placa)
         
@@ -121,24 +32,39 @@ export function LancamentoFrete(){
     }
 
     function addFrete(){
-        SetFretes( [...fretes, { 
+        SetFrete( { 
             data: String(Date.now()),
-            frete: (fretes.length + 1),
+            frete: (frete.length + 1),
             pesoTotal: (nota.length * 10),
             freteEmpresa,
             freteSaidaMoto,
             quantidadeEntregas:nota.length,
-            motorista:moto.name,
-            placa:moto.placa,
+            motorista: moto.name,
+            placa: moto.placa,
             nota 
 
-        }])
+        })
 
         setMoto('')
         setFreteSaidaMoto('')
     }
+    useEffect(()=>{
+        async function searchNotas(){
+            const response = await api.get(`/motorista/${fetchMotorista}`)
+            setMoto(response.data)
+        }
+        searchNotas()
+    },[fetchMotorista])
 
-    const theadFretes = ["DATA","FRETE","PESO_TOTAL","FRETE_EMPRESA","FRETE_MOTORISTA","QUANTIDADE_ENTREGAS","MOTORISTA","PLACA", "NOTAS FISCAIS"]
+    useEffect(()=>{
+        async function getNotas() {
+            const response = await api.get('/notas')
+            setNotasFrete(response.data)
+        }
+
+        getNotas()
+    },[])
+
     return(
         <>
         <Section title={"Lançamento de Frete"}>
@@ -146,14 +72,20 @@ export function LancamentoFrete(){
                 <div className='info'>
                     <Labels>
                         <label>PLACA: </label>
-                        <select name="placa" onChange={e=>selectMotorista(e.target.value)}>
+                        <input type="text" placeholder='Pesquisar Placa' onChange={e => setFetchMotorista(e.target.value)}  />
+                            {
+                                moto.map((placa,index)=>(
+                                    <div>
+                                        <span key={String(index)}>{placa.placa} </span>
+                                        <span key={String(index)}> {placa.name}</span>
+                                    </div>
+                                ))
+                            }
+                        {/* <select name="placa" onChange={e=>selectMotorista(e.target.value)}>
                             {motoristas.map(placa =>(
                                 <option value={placa.placa}>{placa.placa}</option>
                             ))}
-                        </select>
-                        <label>MOTORISTA </label>
-                        <p className='nomeMoto'> {moto.name}</p>
-
+                        </select> */}
                     </Labels>
                     <Labels>
                         <label>FRETE EMPRESA</label>
@@ -165,25 +97,32 @@ export function LancamentoFrete(){
                         <label>NOTAS</label>
                         <select name="Notas" onChange={e => setNota([...nota, e.target.value])}>
                             <option value=""></option>                       
-                            {notasSelected.map(nota =>(
+                            {notasFrete.map(nota =>(
                                 <option value={nota.numero_nota}>{nota.numero_nota}</option>
                             ))}
                         </select>
                     </Labels>
                 </div>
 
-                <ul>
-                    {nota.map((NF, key) => (
-                            <li key={key}>{NF} - <button onClick={() => delNota(NF)}>del</button></li>
-                ))}
-                </ul>
+                
 
             </Frete>
         </Section>
+        <Section>
+            
+            <Labels>
+                <label>MOTORISTA </label>
+                <p className='nomeMoto'>{frete.motorista}</p>    
+            </Labels>
+            <ul>
+                {nota.map((NF, key) => (
+                        <li key={key}>{NF} - <button onClick={() => delNota(NF)}>del</button></li>
+                ))}
+            </ul>
+        </Section>
         <button onClick={addFrete}>Enviar Frete</button>
                 
-        <Section>
-        <Tabela data={fretes} customKeys={theadFretes }/>      
+        {/* <Section>
         <Tbody>   
                 <TheadBody>
                     {keysHeadTable.map(keyHeader=>(<th>{keyHeader}</th>))}
@@ -204,7 +143,7 @@ export function LancamentoFrete(){
                 ))}
             </tr>
         </Tbody>                        
-        </Section>
+        </Section> */}
         </>
     );
 }

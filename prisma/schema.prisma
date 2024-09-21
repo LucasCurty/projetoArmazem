@@ -20,8 +20,9 @@ model User {
 }
 
 model Nota {
-  id                    Int     @id @default(autoincrement())
-  numero_nota           String
+  id                    Int       @id @default(autoincrement())
+  numero_nota           Int
+  data_entrada          DateTime  @default(now())
   client                String
   destinatario          String
   endereco_destinatario String
@@ -29,25 +30,46 @@ model Nota {
   peso                  String
   valor_nota            String
   tipo_produto          String?
+  data_saida            DateTime?
+  status_entrega        String?
+
+  observacoes String?
+  motoristaId Int?
+  motorista   Motorista? @relation(fields: [motoristaId], references: [id])
 
   frete_id Int?
-  frete   Frete? @relation(fields: [frete_id], references: [id])
+  frete    Frete? @relation(fields: [frete_id], references: [id])
 
   @@map("notas")
+}
+
+model Motorista {
+  id                  Int     @id @default(autoincrement())
+  name                String
+  cpf_cnpj            String @unique 
+  placa               String
+  tipo_veiculo        String?
+  gerenciamento_risco String?
+  Nota                Nota[]
+  Frete               Frete[]
 }
 
 model Frete {
   id         Int      @id @default(autoincrement())
   data_frete DateTime @default(now())
 
-  peso                  Float
+  peso_total            Float
   frete_empresa         Int
   frete_saida_motorista Int
-  quantidade_entregas   Int
-  motorista             String
-  placa                 String
+  quantidade_entregas   Int?
+  km_inicial Int?
+  km_final Int?
+  
+  motorista   Motorista? @relation(fields: [motoristaId], references: [id])
+  motoristaId Int?
 
-  notas                  Nota[]
+  notas    String
+  notas_id Nota[]
 
   @@map("fretes")
 }

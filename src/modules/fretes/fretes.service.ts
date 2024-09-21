@@ -1,19 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
 import { FreteDTO } from './fretes.dto';
+import { motoristaDTO } from '../motoristas/motorista.dto';
 
 @Injectable()
 export class FretesService {
     constructor(private prisma: PrismaService){}
 
-    async createFrete(data: FreteDTO){
+    async createFrete(data: FreteDTO, motorista: motoristaDTO){
+        const arrayNota = String([data.notas])
 
-        const createFrete = await this.prisma.frete.create({
-            data
+        return await this.prisma.frete.create({
+            data:{
+                ...data,
+                notas: arrayNota,
+                motorista:{
+                    create: motorista
+                }
+            }
         })
-
-        return console.log(createFrete)
-
+        .then(res => console.log(res))
+        .catch(error => console.error(error))
     }
 
     async findAllFretes(){

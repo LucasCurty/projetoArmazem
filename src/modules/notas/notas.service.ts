@@ -22,12 +22,7 @@ export class NotasService {
 
     }
     async findAllNotas(){
-        const notas = await this.prisma.nota.findMany({
-            include:{
-                frete:true
-            }
-        });
-        return notas
+        return await this.prisma.nota.findMany();
     }
 
     async updateNota(id: number, data:NotasDTO){
