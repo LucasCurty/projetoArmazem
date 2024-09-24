@@ -25,6 +25,16 @@ export class NotasService {
         return await this.prisma.nota.findMany();
     }
 
+    async finOneNote(nota: number){
+        return await this.prisma.nota.findMany({
+              where:{
+                numero_nota:{
+                  equals: nota  
+                }
+              }
+          })
+          }
+
     async updateNota(id: number, data:NotasDTO){
         const notaExist = await this.prisma.nota.findUnique({
             where:{

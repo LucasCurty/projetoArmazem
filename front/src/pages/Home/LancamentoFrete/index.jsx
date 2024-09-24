@@ -19,6 +19,7 @@ export function LancamentoFrete(){
 
 
     const [fetchMotorista, setFetchMotorista] = useState([])
+    const [fecthNotas, setFetchNotas] = useState([])
 
     function selectMotorista(event){
         let encontrado = motoristas.find((element)=> event === element.placa)
@@ -48,6 +49,7 @@ export function LancamentoFrete(){
         setMoto('')
         setFreteSaidaMoto('')
     }
+    
     useEffect(()=>{
         async function searchNotas(){
             const response = await api.get(`/motorista/${fetchMotorista}`)
@@ -57,13 +59,13 @@ export function LancamentoFrete(){
     },[fetchMotorista])
 
     useEffect(()=>{
-        async function getNotas() {
-            const response = await api.get('/notas')
-            setNotasFrete(response.data)
+        async function getNotas(e) {
+            const response = await api.get(`/notas/${fecthNotas}`)
+            setNota(response.data)
         }
 
         getNotas()
-    },[])
+    },[fecthNotas])
 
     return(
         <>
@@ -72,20 +74,14 @@ export function LancamentoFrete(){
                 <div className='info'>
                     <Labels>
                         <label>PLACA: </label>
-                        <input type="text" placeholder='Pesquisar Placa' onChange={e => setFetchMotorista(e.target.value)}  />
-                            {
-                                moto.map((placa,index)=>(
-                                    <div>
-                                        <span key={String(index)}>{placa.placa} </span>
-                                        <span key={String(index)}> {placa.name}</span>
-                                    </div>
-                                ))
-                            }
-                        {/* <select name="placa" onChange={e=>selectMotorista(e.target.value)}>
-                            {motoristas.map(placa =>(
-                                <option value={placa.placa}>{placa.placa}</option>
-                            ))}
-                        </select> */}
+                        <input type="text" name='placa' autocomplete="Placa" placeholder='Pesquisar Placa' onChange={e => setFetchMotorista(e.target.value)}  />
+                           <ul>
+                              {
+                                 moto.map((placa,index) => (
+                                    <li key={String(index)}>{placa.placa} </li>
+                                    ))
+                              }
+                           </ul>
                     </Labels>
                     <Labels>
                         <label>FRETE EMPRESA</label>
@@ -95,12 +91,14 @@ export function LancamentoFrete(){
                     </Labels>
                     <Labels>
                         <label>NOTAS</label>
-                        <select name="Notas" onChange={e => setNota([...nota, e.target.value])}>
-                            <option value=""></option>                       
-                            {notasFrete.map(nota =>(
-                                <option value={nota.numero_nota}>{nota.numero_nota}</option>
-                            ))}
-                        </select>
+                        <input type="text" name='nota' placeholder='Selecione as Notas' onChange={e => setFetchNotas(e.target.value)}  />
+                           <ul>
+                              {
+                                //  nota.map((nota,index) => (
+                                //     <li key={String(index)}>{nota} </li>
+                                //     ))
+                              }
+                           </ul>
                     </Labels>
                 </div>
 

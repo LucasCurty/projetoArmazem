@@ -17,6 +17,12 @@ export class NotasController {
   async findAll(){
     return this.notasService.findAllNotas();
   }
+  
+  @Get(':nota')
+  async findOneNote(@Param("nota") nota: number){
+    return this.notasService.finOneNote(nota)
+  }
+  
 
   @Put(":id")
   async update(@Param("id") id:number, @Body() data: NotasDTO){

@@ -13,7 +13,6 @@ export const Frete = styled.main`
         width: 100%;
         max-height: 50px;
         overflow-y: scroll;
-
         display: flex;
         flex-wrap: wrap;
     }
