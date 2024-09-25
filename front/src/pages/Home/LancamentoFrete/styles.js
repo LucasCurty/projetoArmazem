@@ -9,12 +9,36 @@ export const Frete = styled.main`
         display: flex;
         flex-direction: row;
     }
-    > ul{
-        width: 100%;
-        max-height: 50px;
-        overflow-y: scroll;
+
+`;
+
+export const InsertValues = styled.form`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    > div{
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
+        >  label{
+            padding: 8px 0;
+            color: ${({theme})=> theme.COLORS.ORANGE};
+        }
+
+        > ul{
+            margin-top: 3px ;
+            > li{
+                padding: 5px 10px;
+                background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+            }
+            > li:hover{
+                    background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+                    cursor: pointer;
+                }    
+            
+        }
     }
 `;
 export const Labels = styled.div`

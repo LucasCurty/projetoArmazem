@@ -3,28 +3,29 @@ import { useEffect, useState } from 'react';
 import { Section } from '../../../Components/Section';
 import { Tabela } from '../../../Components/Tabela';
 
-import {Tbody , Labels, Frete, TheadBody , DivTr} from './styles'
+import {Tbody , Labels, Frete, InsertValues} from './styles'
 
 import { api } from '../../../services/api'
 
 export function LancamentoFrete(){
     const [moto, setMoto] = useState([])
+    const [motorista, setMotorista] = useState({})
+    const [notasFrete, setNotasFrete] = useState([])
     const [nota, setNota] = useState([])
     const [freteEmpresa, setFreteEmpresa] = useState('')
     const [freteSaidaMoto, setFreteSaidaMoto] = useState('')
     const [frete, SetFrete] = useState({})
-    const [motoristas, setMotoristas] = useState([])
-    const [notasFrete, setNotasFrete] = useState([])
 
 
 
-    const [fetchMotorista, setFetchMotorista] = useState([])
+    const [fetchMotorista, setFetchMotorista] = useState(null)
     const [fecthNotas, setFetchNotas] = useState([])
 
     function selectMotorista(event){
-        let encontrado = motoristas.find((element)=> event === element.placa)
-        
-        setMoto(encontrado)
+        setMotorista(event)
+        setFetchMotorista(null)
+
+        event.target.value = '' 
     }
 
     function delNota(event){
@@ -40,7 +41,7 @@ export function LancamentoFrete(){
             freteEmpresa,
             freteSaidaMoto,
             quantidadeEntregas:nota.length,
-            motorista: moto.name,
+            motorista: motorista.name,
             placa: moto.placa,
             nota 
 
@@ -51,72 +52,72 @@ export function LancamentoFrete(){
     }
     
     useEffect(()=>{
-        async function searchNotas(){
+        async function searchMotorista(){
             const response = await api.get(`/motorista/${fetchMotorista}`)
             setMoto(response.data)
         }
-        searchNotas()
+        searchMotorista()
     },[fetchMotorista])
 
-    useEffect(()=>{
-        async function getNotas(e) {
-            const response = await api.get(`/notas/${fecthNotas}`)
-            setNota(response.data)
-        }
+    // useEffect(()=>{
+    //     async function getNotas() {
 
-        getNotas()
-    },[fecthNotas])
+    //         const response = await api.get(`/notas/${fecthNotas}`)
+    //         setNota(response.data)
+    //     }
 
+    //     getNotas()
+    // },[fecthNotas])
+    console.log(freteEmpresa)
     return(
         <>
         <Section title={"Lançamento de Frete"}>
             <Frete>
-                <div className='info'>
-                    <Labels>
+                <InsertValues className='info'>
+                    <div>
                         <label>PLACA: </label>
                         <input type="text" name='placa' autocomplete="Placa" placeholder='Pesquisar Placa' onChange={e => setFetchMotorista(e.target.value)}  />
-                           <ul>
-                              {
-                                 moto.map((placa,index) => (
-                                    <li key={String(index)}>{placa.placa} </li>
-                                    ))
-                              }
-                           </ul>
-                    </Labels>
-                    <Labels>
+                            <ul>
+                                { fetchMotorista &&
+                                    moto.map((motorista,index) => (
+                                        <li key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </li>
+                                        ))
+                                }
+                                
+                            </ul>
+                    </div>
+                    <div>
                         <label>FRETE EMPRESA</label>
-                        <input type="text" placeholder="Insira o valor" onChange={e => setFreteEmpresa(e.target.value)}/>
+                        <input type="text" placeholder="Insira o valor" on onChange={e => setFreteEmpresa(e.target.value)}/>
+                        
                         <label>FRETE MOTORISTA</label>
                         <input type="text" placeholder="Insira o valor" onChange={e => setFreteSaidaMoto(e.target.value)}/>
-                    </Labels>
-                    <Labels>
+                    </div>
+                    <div>
                         <label>NOTAS</label>
                         <input type="text" name='nota' placeholder='Selecione as Notas' onChange={e => setFetchNotas(e.target.value)}  />
-                           <ul>
-                              {
-                                //  nota.map((nota,index) => (
-                                //     <li key={String(index)}>{nota} </li>
-                                //     ))
-                              }
-                           </ul>
-                    </Labels>
-                </div>
+                        <ul>
+                            {nota.map((NF, key) => (
+                                    <li key={key}>{NF} - <button onClick={() => delNota(NF)}>del</button></li>
+                            ))}
+                         </ul>
+                    </div>
+                </InsertValues>
 
                 
 
             </Frete>
         </Section>
-        <Section>
-            
+        <Section title="Informações do frete">
             <Labels>
                 <label>MOTORISTA </label>
-                <p className='nomeMoto'>{frete.motorista}</p>    
+                <p className='nomeMoto'>{motorista.name}</p>    
+                <label>PLACA </label>
+                <p className='nomeMoto'>{motorista.placa}</p>    
+                <label>TIPO DE VEICULO </label>
+                <p className='nomeMoto'>{motorista.tipo_veiculo}</p>    
             </Labels>
-            <ul>
-                {nota.map((NF, key) => (
-                        <li key={key}>{NF} - <button onClick={() => delNota(NF)}>del</button></li>
-                ))}
-            </ul>
+            
         </Section>
         <button onClick={addFrete}>Enviar Frete</button>
                 

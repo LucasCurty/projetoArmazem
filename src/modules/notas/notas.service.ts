@@ -25,21 +25,23 @@ export class NotasService {
         return await this.prisma.nota.findMany();
     }
 
-    async finOneNote(nota: number){
+    async finOneNote(id: number){
         return await this.prisma.nota.findMany({
-              where:{
-                numero_nota:{
-                  equals: nota  
-                }
-              }
-          })
-          }
+            where:{ motoristaId: id},
+            include:{
+                motorista: true
+            }
+              
+        })
+    }
+
 
     async updateNota(id: number, data:NotasDTO){
+        
         const notaExist = await this.prisma.nota.findUnique({
-            where:{
-                id
-            }
+            where:{ 
+                id: Number(id)
+             }
         })
 
         if(!notaExist){
@@ -48,9 +50,7 @@ export class NotasService {
 
         return await this.prisma.nota.update({
             data,
-            where:{
-                id
-            }
+            where:{ id: Number(id) }
         })
     }
 
