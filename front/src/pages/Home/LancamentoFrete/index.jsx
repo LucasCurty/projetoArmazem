@@ -10,26 +10,35 @@ export function LancamentoFrete(){
     const [moto, setMoto] = useState([])
     const [motorista, setMotorista] = useState({})
     const [notasFrete, setNotasFrete] = useState([])
-    const [nota, setNota] = useState([])
     const [freteEmpresa, setFreteEmpresa] = useState('')
     const [freteSaidaMoto, setFreteSaidaMoto] = useState('')
     const [frete, SetFrete] = useState({})
 
 
 
-    const [fetchMotorista, setFetchMotorista] = useState(null)
-    const [fecthNotas, setFetchNotas] = useState([])
+    const [searchMotorista, setSearchMotorista] = useState(null)
+
+    const [mydate, setMyDate] = useState({
+      day: new Date().getDate(),
+      months: (new Date().getMonth() + 1).toString().padStart(2, '0'),
+      years: new Date().getFullYear(),
+    })
+
+    function handleChangeDate(e){
+      const data = String(e).split('-')
+      setMyDate({
+        day: data[2],
+        months: data[1],
+        years: data[0],
+      })
+    }
+
 
     function selectMotorista(event){
         setMotorista(event)
-        setFetchMotorista(null)
+        setSearchMotorista(null)
 
         event.target.value = '' 
-    }
-
-    function delNota(event){
-        let removed = nota.filter(element => event !== element)
-       setNota(removed)
     }
 
     function addFrete(){
@@ -51,86 +60,90 @@ export function LancamentoFrete(){
     }
     
     useEffect(()=>{
-        async function searchMotorista(){
-            const response = await api.get(`/motorista/${fetchMotorista}`)
+        async function getMotorista(){
+            const response = await api.get(`/motorista/${searchMotorista}`)
             setMoto(response.data)
         }
-        searchMotorista()
-    },[fetchMotorista])
+        getMotorista()
+    },[searchMotorista])
 
     useEffect(()=>{
         async function getNotas() {
-            const response = await api.get(`/notas/${fecthNotas}`)
+            const response = await api.get(`/notas`)
             setNotasFrete(response.data)
         }
 
         getNotas()
 
-    },[fecthNotas])
+    },[moto])
 
     return(
         <>
         <Section title={"Lançamento de Frete"}>
             <Frete>
-                <InsertValues className='info'>
-                    <div>
-                        <label>PLACA: </label>
-                        <input type="text" name='placa' autocomplete="Placa" placeholder='Pesquisar Placa' onChange={e => setFetchMotorista(e.target.value)}  />
-                            <ul>
-                                { fetchMotorista &&
-                                    moto.map((motorista,index) => (
-                                        <li key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </li>
-                                        ))
-                                }
-                            </ul>
-                    </div>
-                    <div>
-                        <label>FRETE EMPRESA</label>
-                        <input type="text" placeholder="Insira o valor" on onChange={e => setFreteEmpresa(e.target.value)}/>
-                        
-                        <label>FRETE MOTORISTA</label>
-                        <input type="text" placeholder="Insira o valor" onChange={e => setFreteSaidaMoto(e.target.value)}/>
-                    </div>
-                    <div>
-                        <label>NOTAS</label>
-                        <input type="text" name='nota' placeholder='Selecione as Notas' onChange={e => setFetchNotas(e.target.value)}  />
-                        <ul>
-                            {nota.map((NF, key) => (
-                                    <li key={key}>{NF} - <button onClick={() => delNota(NF)}>del</button></li>
-                            ))}
-                         </ul>
-                    </div>
+              {
+                <div className='data'>
+                  <label>DATA </label>
+                  <br />
+                  <input type="date" onChange={e => handleChangeDate(e.target.value)} />
+                </div>
+              }
+                 
+              <InsertValues >
+                <div className='infPlaca'>
+                  <label>PLACA: </label>
+                  <input type="text" name='placa' placeholder='Pesquisar Placa' onChange={e => setSearchMotorista(e.target.value)}  />
+                  <ul>
+                    { searchMotorista &&
+                        moto.map((motorista,index) => (
+                          <li key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </li>
+                        ))
+                    }
+                  </ul>
+                </div>
+                <div className='infFrete'>
+                  <div>
+                    <label>FRETE EMPRESA</label>
+                    <input type="text" placeholder="Insira o valor" on onChange={e => setFreteEmpresa(e.target.value)}/>
+                  </div>
+                  <div className='secondChildren'>
+                    <label>FRETE MOTORISTA</label>
+                    <input type="text" placeholder="Insira o valor" onChange={e => setFreteSaidaMoto(e.target.value)}/>
+                  </div>
+                </div>
                 </InsertValues>
-
-                
-
             </Frete>
         </Section>
         <Section title="Informações do frete">
-            <Labels>
-                <label>MOTORISTA </label>
-                <p className='nomeMoto'>{motorista.name}</p>    
-                <label>PLACA </label>
-                <p>{motorista.placa}</p>    
-                <label>TIPO DE VEICULO </label>
-                <p>{motorista.tipo_veiculo}</p>    
-            </Labels>
-            <Labels>
-                <label>FRETE EMPRESA</label>
-                <p>{freteEmpresa}</p>
-                <label>FRETE MOTORISTA</label>
-                <p>{freteSaidaMoto}</p>
-            </Labels>
-            <Labels>
-                <label>NOTAS</label>
-                <ul>
-                    {notasFrete.map(note => ( 
-                        <li>{note.numero_nota}</li>
-                    ))
-                    }
-                </ul>
-            </Labels>
-            
+          <Labels>
+            <label>DATA </label>
+            <p>{mydate.day}/{mydate.months}/{mydate.years}</p>
+          </Labels>
+
+          <Labels>
+              <label>MOTORISTA </label>
+              <p className='nomeMoto'>{motorista.name}</p>    
+              <label>PLACA </label>
+              <p>{motorista.placa}</p>    
+              <label>TIPO DE VEICULO </label>
+              <p>{motorista.tipo_veiculo}</p>    
+          </Labels>
+          <Labels>
+              <label>FRETE EMPRESA</label>
+              <p>{freteEmpresa}</p>
+              <label>FRETE MOTORISTA</label>
+              <p>{freteSaidaMoto}</p>
+          </Labels>
+          <Labels>
+              <label>NOTAS</label>
+              <ul>
+                  {notasFrete.map(note => ( 
+                      <li>{note.numero_nota}</li>
+                  ))
+                  }
+              </ul>
+          </Labels>
+          
         </Section>
         <button onClick={addFrete}>Enviar Frete</button>
         </>

@@ -2,12 +2,20 @@ import styled from "styled-components";
 
 export const Frete = styled.main`
     display: flex;
-    align-items: center;
     justify-content: space-between;
     padding-bottom: 1rem;
+
     > .info{
         display: flex;
         flex-direction: row;
+    }
+
+    > .data{
+        padding-right: 1rem;
+        > label{
+            color: ${({theme})=> theme.COLORS.ORANGE};
+            margin-bottom: 10px;
+        }
     }
 
 `;
@@ -17,13 +25,13 @@ export const InsertValues = styled.form`
     height: 100%;
 
     display: flex;
-    justify-content: space-between;
+    gap: 1rem;
 
-    > div{
+    > .infPlaca{
         display: flex;
         flex-direction: column;
-        >  label{
-            padding: 8px 0;
+
+        > div, label{
             color: ${({theme})=> theme.COLORS.ORANGE};
         }
 
@@ -40,6 +48,23 @@ export const InsertValues = styled.form`
             
         }
     }
+
+    > .infFrete{
+      display: flex;
+      flex-direction: column;
+
+      > div{
+        display: flex;
+        flex-direction: column;
+        > label{
+          color: ${({theme})=> theme.COLORS.ORANGE};
+          flex-direction: column;
+        }
+      }
+    .secondChildren{
+        margin-top: 10px;
+  }
+    }
 `;
 export const Labels = styled.div`
     display: flex;
@@ -50,8 +75,9 @@ export const Labels = styled.div`
     }
     > p{
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
-        padding-left: 1.2rem;
+        padding: 3px 8px;
         margin: 5px 0;
+        width: fit-content;
     }
     > input {
         border: none;
