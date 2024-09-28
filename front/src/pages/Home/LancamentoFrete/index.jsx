@@ -1,9 +1,8 @@
 
 import { useEffect, useState } from 'react';
 import { Section } from '../../../Components/Section';
-import { Tabela } from '../../../Components/Tabela';
 
-import {Tbody , Labels, Frete, InsertValues} from './styles'
+import {Labels, Frete, InsertValues} from './styles'
 
 import { api } from '../../../services/api'
 
@@ -59,16 +58,16 @@ export function LancamentoFrete(){
         searchMotorista()
     },[fetchMotorista])
 
-    // useEffect(()=>{
-    //     async function getNotas() {
+    useEffect(()=>{
+        async function getNotas() {
+            const response = await api.get(`/notas/${fecthNotas}`)
+            setNotasFrete(response.data)
+        }
 
-    //         const response = await api.get(`/notas/${fecthNotas}`)
-    //         setNota(response.data)
-    //     }
+        getNotas()
 
-    //     getNotas()
-    // },[fecthNotas])
-    console.log(freteEmpresa)
+    },[fecthNotas])
+
     return(
         <>
         <Section title={"Lançamento de Frete"}>
@@ -83,7 +82,6 @@ export function LancamentoFrete(){
                                         <li key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </li>
                                         ))
                                 }
-                                
                             </ul>
                     </div>
                     <div>
@@ -113,36 +111,28 @@ export function LancamentoFrete(){
                 <label>MOTORISTA </label>
                 <p className='nomeMoto'>{motorista.name}</p>    
                 <label>PLACA </label>
-                <p className='nomeMoto'>{motorista.placa}</p>    
+                <p>{motorista.placa}</p>    
                 <label>TIPO DE VEICULO </label>
-                <p className='nomeMoto'>{motorista.tipo_veiculo}</p>    
+                <p>{motorista.tipo_veiculo}</p>    
+            </Labels>
+            <Labels>
+                <label>FRETE EMPRESA</label>
+                <p>{freteEmpresa}</p>
+                <label>FRETE MOTORISTA</label>
+                <p>{freteSaidaMoto}</p>
+            </Labels>
+            <Labels>
+                <label>NOTAS</label>
+                <ul>
+                    {notasFrete.map(note => ( 
+                        <li>{note.numero_nota}</li>
+                    ))
+                    }
+                </ul>
             </Labels>
             
         </Section>
         <button onClick={addFrete}>Enviar Frete</button>
-                
-        {/* <Section>
-        <Tbody>   
-                <TheadBody>
-                    {keysHeadTable.map(keyHeader=>(<th>{keyHeader}</th>))}
-                </TheadBody>
-            <tr>
-            
-                {notasSelected.map(notas =>(
-                        <DivTr>
-                            <td><strong>{notas.numero_nota}</strong></td>
-                            <td>{notas.client}</td>
-                            <td>{notas.destinatario}</td>
-                            <td>{notas.endereco_destinatario}</td>
-                            <td>{notas.cidade}</td>
-                            <td>{notas.peso}</td>
-                            <td>{notas.valor_nota}</td>
-                            <td>{notas.tipo_produto}</td>
-                        </DivTr>                          
-                ))}
-            </tr>
-        </Tbody>                        
-        </Section> */}
         </>
     );
 }
