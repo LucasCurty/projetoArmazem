@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
+
 export const Frete = styled.main`
     display: flex;
     justify-content: space-between;
     padding-bottom: 1rem;
-
+    > div, label{
+      margin-bottom: 10px;
+    }
     > .info{
         display: flex;
         flex-direction: row;
@@ -13,8 +16,10 @@ export const Frete = styled.main`
     > .data{
         padding-right: 1rem;
         > label{
-            color: ${({theme})=> theme.COLORS.ORANGE};
-            margin-bottom: 10px;
+          color: ${({theme})=> theme.COLORS.ORANGE};
+        }
+        input[type=date]{
+          margin-top: 10px;
         }
     }
 
@@ -66,82 +71,71 @@ export const InsertValues = styled.form`
   }
     }
 `;
+
+export const LancarFrete = styled.div`
+    display: flex;
+    flex-direction: row;
+    background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+    padding: 1rem 0px;
+`;
+
 export const Labels = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 0 1rem;
+    width: 180px;
+
     > label{
-        color: ${({theme})=> theme.COLORS.ORANGE};
+      font-size: 1rem;
+      color: ${({theme})=> theme.COLORS.ORANGE};
     }
     > p{
+        font-size: 1rem;
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
         padding: 3px 8px;
         margin: 5px 0;
         width: fit-content;
     }
-    > input {
-        border: none;
-        margin: 5px;
-        background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
-        color: white;
-        padding-left: 1rem;
-    }
-    input[type=text]:focus {
-        background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
-    }
-    > select{
-        border: none;
-        background-color: white;
-        padding:2px 3px;
-        font-weight: 600;
-        border-radius: 3px;
-        margin: 5px 0;
 
-        > option{
-        font-weight: 600;
-            
+    ul{
+      display: flex;
+      flex-direction: column;
+
+      > li{
+        > .tooltip {
+          position: relative;
+          display: inline-block;
+          font-size: 1rem;
+          padding: 3px 0;
+          cursor: pointer;
         }
+       
+        > .tooltip .tooltiptext {
+          visibility: hidden;
+          width: max-content;
+          background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+          color: #fff;
+          padding: 5px;
+          text-align: start;
+          border-radius:6px;
+          position: absolute;
+          z-index: 1;
+          left: 100%;
+          margin-left: 60px;
+          opacity: 0;
+          transition: opacity 0.3s;
+          > p span{
+            color: ${({theme})=> theme.COLORS.ORANGE};
+          }
+        }
+        > .tooltip:hover{
+          background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+          
+        }
+        > .tooltip:hover .tooltiptext {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
     }
-    .nomeMoto{
-        font-size: 1rem;
-    }
+  
 `;
-
-export const Tbody = styled.tbody`
-    display: none;
-    overflow-x: scroll;
-    position: relative;
-
-
-    td, th{
-        border: 1px solid ${({theme})=> theme.COLORS.WHITE};
-        padding: 5px;
-    }
-    tr{
-        display: flex;
-        flex-direction: row;
-        margin-left: 180px;
-        border: 1px solid black;
-
-    }
-
-
-`;
-export const TheadBody = styled.div`
-    display: flex;
-    flex-direction: column;
-    background-color: ${({theme})=> theme.COLORS.ORANGE};
-    width: 180px;
-    position:absolute;
-    
-`;
-
-export const DivTr = styled.div`
-    display: flex;
-    flex-direction: column;
-    > td{
-        white-space:nowrap;
-        text-overflow: ellipsis;
-
-    }
-`

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Section } from '../../../Components/Section';
 
-import {Labels, Frete, InsertValues} from './styles'
+import {LancarFrete, Labels, Frete, InsertValues} from './styles'
 
 import { api } from '../../../services/api'
 
@@ -71,24 +71,29 @@ export function LancamentoFrete(){
         async function getNotas() {
             const response = await api.get(`/notas`)
             setNotasFrete(response.data)
-        }
 
+        }
         getNotas()
 
     },[moto])
+    useEffect(()=>{
+      const getCidades = notasFrete.map(notas => (notas.cidade))
+      // const cidades = new Set(getCidades)
+      console.log(getCidades)
+      // console.log(cidades)
+    },[])
 
     return(
-        <>
+      <main>
         <Section title={"Lançamento de Frete"}>
             <Frete>
               {
                 <div className='data'>
-                  <label>DATA </label>
+                  <label>DATA</label>
                   <br />
                   <input type="date" onChange={e => handleChangeDate(e.target.value)} />
                 </div>
               }
-                 
               <InsertValues >
                 <div className='infPlaca'>
                   <label>PLACA: </label>
@@ -115,37 +120,56 @@ export function LancamentoFrete(){
             </Frete>
         </Section>
         <Section title="Informações do frete">
-          <Labels>
-            <label>DATA </label>
-            <p>{mydate.day}/{mydate.months}/{mydate.years}</p>
-          </Labels>
+          <LancarFrete>
+            <Labels>
+              <label>DATA</label>
+              <p>{mydate.day}/{mydate.months}/{mydate.years}</p>
+            </Labels>
 
-          <Labels>
-              <label>MOTORISTA </label>
-              <p className='nomeMoto'>{motorista.name}</p>    
-              <label>PLACA </label>
-              <p>{motorista.placa}</p>    
-              <label>TIPO DE VEICULO </label>
-              <p>{motorista.tipo_veiculo}</p>    
-          </Labels>
-          <Labels>
-              <label>FRETE EMPRESA</label>
-              <p>{freteEmpresa}</p>
-              <label>FRETE MOTORISTA</label>
-              <p>{freteSaidaMoto}</p>
-          </Labels>
-          <Labels>
-              <label>NOTAS</label>
-              <ul>
-                  {notasFrete.map(note => ( 
-                      <li>{note.numero_nota}</li>
+            <Labels>
+                <label>MOTORISTA </label>
+                <p>{motorista.name}</p>    
+                <label>PLACA </label>
+                <p>{motorista.placa}</p>    
+                <label>TIPO DE VEICULO </label>
+                <p>{motorista.tipo_veiculo}</p>    
+            </Labels>
+            <Labels>
+                <label>FRETE EMPRESA</label>
+                <p>{freteEmpresa}</p>
+                <label>FRETE MOTORISTA</label>
+                <p>{freteSaidaMoto}</p>
+            </Labels>
+            <Labels>
+              <label>CIDADES DESTINO</label>
+            </Labels>
+              
+            <Labels>
+                <label>NOTAS</label>
+                <ul>
+                  {notasFrete.map((note , index) => ( 
+                    <li key={index}>
+                      <div className="tooltip">
+                        {note.numero_nota}
+                        <div className="tooltiptext">
+                          <p><span>NFe:</span> {note.numero_nota}</p>
+                          <p><span>Cliente:</span> {note.client}</p>
+                          <p><span>Destinatário:</span> {note.destinatario}</p>
+                          <p><span>Endereço:</span> {note.endereco_destinatario}</p>
+                          <p><span>Peso:</span> {note.peso}</p>
+                          <p><span>Valor:</span> {note.valor_nota}</p>
+                          <p><span>Tipo:</span> {note.tipo}</p>
+                          <p><span>Obs:</span> {note.observacoes}</p>
+                        </div>
+                      </div>
+                    </li>
                   ))
                   }
-              </ul>
-          </Labels>
-          
+                </ul>
+            </Labels>
+          </LancarFrete>
         </Section>
         <button onClick={addFrete}>Enviar Frete</button>
-        </>
+      </main>
     );
 }
