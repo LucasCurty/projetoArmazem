@@ -12,11 +12,12 @@ export function LancamentoFrete(){
     const [notasFrete, setNotasFrete] = useState([])
     const [freteEmpresa, setFreteEmpresa] = useState('')
     const [freteSaidaMoto, setFreteSaidaMoto] = useState('')
-    const [frete, SetFrete] = useState({})
+
 
 
 
     const [searchMotorista, setSearchMotorista] = useState(null)
+    const [cidades, setCidades] = useState([])
 
     const [mydate, setMyDate] = useState({
       day: new Date().getDate(),
@@ -36,28 +37,37 @@ export function LancamentoFrete(){
 
     function selectMotorista(event){
         setMotorista(event)
-        setSearchMotorista(null)
+        setSearchMotorista(event)
 
-        event.target.value = '' 
+
     }
 
-    function addFrete(){
-        SetFrete( { 
-            data: String(Date.now()),
-            frete: (frete.length + 1),
-            pesoTotal: (nota.length * 10),
-            freteEmpresa,
-            freteSaidaMoto,
-            quantidadeEntregas:nota.length,
-            motorista: motorista.name,
-            placa: moto.placa,
-            nota 
+    async function addFrete(){
+      if(!freteEmpresa || !freteSaidaMoto){
+        return alert("nao existe frete empresa ou frete saida")
+      }
 
-        })
+      await api.post('fretes',
+        { 
+          data: Date.now(),
+          pesoTotal: (notasFrete.length * 10),
+          freteEmpresa,
+          freteSaidaMoto,
+          quantidadeEntregas:notasFrete.length,
+          motorista: motorista.name,
+          placa: motorista.placa,
+          notasFrete 
+        }
+      )
+      .then(res => console.log(res))
+      .catch(error => console.log(error))
+      
 
-        setMoto('')
+        setMoto([''])
+        setFreteEmpresa('')
         setFreteSaidaMoto('')
-    }
+        setMotorista({})
+      }
     
     useEffect(()=>{
         async function getMotorista(){
@@ -76,13 +86,14 @@ export function LancamentoFrete(){
         getNotas()
 
     },[moto])
+
     useEffect(()=>{
       const getCidades = notasFrete.map(notas => (notas.cidade))
-      // const cidades = new Set(getCidades)
-      console.log(getCidades)
-      // console.log(cidades)
-    },[])
+      setCidades([... new Set(getCidades)])
 
+    },[motorista, notasFrete])
+
+    const placaInput = searchMotorista ? searchMotorista.placa : ''
     return(
       <main>
         <Section title={"Lançamento de Frete"}>
@@ -97,25 +108,21 @@ export function LancamentoFrete(){
               <InsertValues >
                 <div className='infPlaca'>
                   <label>PLACA: </label>
-                  <input type="text" name='placa' placeholder='Pesquisar Placa' onChange={e => setSearchMotorista(e.target.value)}  />
-                  <ul>
+                  <input type="text" name='placa' value={placaInput} placeholder='Pesquisar Placa' onChange={e => setSearchMotorista(e.target.value)}  />
                     { searchMotorista &&
                         moto.map((motorista,index) => (
-                          <li key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </li>
+                          <option key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </option>
                         ))
                     }
-                  </ul>
                 </div>
-                <div className='infFrete'>
                   <div>
                     <label>FRETE EMPRESA</label>
-                    <input type="text" placeholder="Insira o valor" on onChange={e => setFreteEmpresa(e.target.value)}/>
+                    <input type="text" placeholder="Insira o valor" value={freteEmpresa} onChange={e => setFreteEmpresa(e.target.value)}/>
                   </div>
-                  <div className='secondChildren'>
+                  <div>
                     <label>FRETE MOTORISTA</label>
-                    <input type="text" placeholder="Insira o valor" onChange={e => setFreteSaidaMoto(e.target.value)}/>
+                    <input type="text" placeholder="Insira o valor" value={freteSaidaMoto} onChange={e => setFreteSaidaMoto(e.target.value)}/>
                   </div>
-                </div>
                 </InsertValues>
             </Frete>
         </Section>
@@ -142,6 +149,7 @@ export function LancamentoFrete(){
             </Labels>
             <Labels>
               <label>CIDADES DESTINO</label>
+                {cidades.map(cidade => (<p>{cidade}</p>))}
             </Labels>
               
             <Labels>

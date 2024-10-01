@@ -8,20 +8,8 @@ export class FretesService {
     constructor(private prisma: PrismaService){}
 
     async createFrete(data: FreteDTO, motorista: motoristaDTO){
-        const arrayNota = String([data.notas])
-
-        return await this.prisma.frete.create({
-            data:{
-                ...data,
-                notas: arrayNota,
-                motorista:{
-                    create: motorista
-                }
-            }
-        })
-        .then(res => console.log(res))
-        .catch(error => console.error(error))
-    }
+          // ainda ciando
+    }        
 
     async findAllFretes(){
         return await this.prisma.frete.findMany();

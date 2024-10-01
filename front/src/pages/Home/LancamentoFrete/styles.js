@@ -52,13 +52,20 @@ export const InsertValues = styled.form`
                 }    
             
         }
+        > option{
+          padding: 6px 10px;
+          background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+          cursor: pointer;
+        }
+        > option:hover{
+          background-color: ${({theme})=> theme.COLORS.BACKGROUND_800};
+
+        }
     }
 
-    > .infFrete{
-      display: flex;
-      flex-direction: column;
 
-      > div{
+
+    > div{
         display: flex;
         flex-direction: column;
         > label{
@@ -66,10 +73,6 @@ export const InsertValues = styled.form`
           flex-direction: column;
         }
       }
-    .secondChildren{
-        margin-top: 10px;
-  }
-    }
 `;
 
 export const LancarFrete = styled.div`
@@ -137,5 +140,6 @@ export const Labels = styled.div`
         }
       }
     }
+
   
 `;

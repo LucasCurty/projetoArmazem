@@ -10,7 +10,6 @@ export class FretesController {
   constructor(private readonly fretesService: FretesService) {}
 
   @Post()
-  @HttpCode(204)
   async create(@Body() data: FreteDTO, motorista: motoristaDTO){
     return this.fretesService.createFrete(data, motorista);
   }

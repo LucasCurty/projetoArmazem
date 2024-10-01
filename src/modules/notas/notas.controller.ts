@@ -19,7 +19,7 @@ export class NotasController {
   }
   
   @Get(':id')
-  async findOneNote(@Param("placa") id: number){
+  async findOneNote(@Param("id") id: number){
     return this.notasService.finOneNote(id)
   }
   
