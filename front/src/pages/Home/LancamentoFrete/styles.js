@@ -52,13 +52,14 @@ export const InsertValues = styled.form`
                 }    
             
         }
-        > option{
+        >div option{
           padding: 6px 10px;
           background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+          color: white;
           cursor: pointer;
         }
-        > option:hover{
-          background-color: ${({theme})=> theme.COLORS.BACKGROUND_800};
+        >div option:hover{
+          background-color: ${({theme})=> theme.COLORS.ORANGE};
 
         }
     }

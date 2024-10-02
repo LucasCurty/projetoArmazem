@@ -20,7 +20,7 @@ export function LancamentoFrete(){
     const [cidades, setCidades] = useState([])
 
     const [mydate, setMyDate] = useState({
-      day: new Date().getDate(),
+      day: (new Date().getDate()).toString().padStart(2,'0'),
       months: (new Date().getMonth() + 1).toString().padStart(2, '0'),
       years: new Date().getFullYear(),
     })
@@ -47,9 +47,23 @@ export function LancamentoFrete(){
         return alert("nao existe frete empresa ou frete saida")
       }
 
-      await api.post('fretes',
-        { 
-          data: Date.now(),
+      // await api.post('fretes',
+      //   { 
+      //     data: Date.now(),
+      //     pesoTotal: (notasFrete.length * 10),
+      //     freteEmpresa,
+      //     freteSaidaMoto,
+      //     quantidadeEntregas:notasFrete.length,
+      //     motorista: motorista.name,
+      //     placa: motorista.placa,
+      //     notasFrete 
+      //   }
+      // )
+      // .then(res => console.log(res.data))
+      // .catch(error => console.log(error.data))
+      
+        console.log({ 
+          data_lancamento: Date.now(),
           pesoTotal: (notasFrete.length * 10),
           freteEmpresa,
           freteSaidaMoto,
@@ -57,13 +71,9 @@ export function LancamentoFrete(){
           motorista: motorista.name,
           placa: motorista.placa,
           notasFrete 
-        }
-      )
-      .then(res => console.log(res))
-      .catch(error => console.log(error))
-      
+        })
 
-        setMoto([''])
+        setSearchMotorista(null)
         setFreteEmpresa('')
         setFreteSaidaMoto('')
         setMotorista({})
@@ -109,11 +119,13 @@ export function LancamentoFrete(){
                 <div className='infPlaca'>
                   <label>PLACA: </label>
                   <input type="text" name='placa' value={placaInput} placeholder='Pesquisar Placa' onChange={e => setSearchMotorista(e.target.value)}  />
+                  <div>
                     { searchMotorista &&
                         moto.map((motorista,index) => (
                           <option key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </option>
                         ))
-                    }
+                      }
+                  </div>
                 </div>
                   <div>
                     <label>FRETE EMPRESA</label>
