@@ -1,3 +1,5 @@
+import { NotasDTO } from "../notas/notas.dto";
+
 export interface FreteDTO {
     placa: string;    
     peso_total: number;
@@ -6,5 +8,5 @@ export interface FreteDTO {
     quantidade_entregas: number;
     motorista?: string;
     
-    notas: string[];
+    notas: NotasDTO[];
 }

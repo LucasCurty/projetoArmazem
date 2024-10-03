@@ -1,5 +1,6 @@
 export type NotasDTO = {
-    numero_nota: number;
+    id?: number;
+    numero_nota: string;
     client: string;
     destinatario: string;
     endereco_destinatario: string;

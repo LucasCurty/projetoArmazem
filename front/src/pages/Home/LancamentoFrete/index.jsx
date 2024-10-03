@@ -62,16 +62,20 @@ export function LancamentoFrete(){
       // .then(res => console.log(res.data))
       // .catch(error => console.log(error.data))
       
-        console.log({ 
-          data_lancamento: Date.now(),
-          pesoTotal: (notasFrete.length * 10),
-          freteEmpresa,
-          freteSaidaMoto,
-          quantidadeEntregas:notasFrete.length,
-          motorista: motorista.name,
-          placa: motorista.placa,
-          notasFrete 
-        })
+        console.log(JSON.stringify({ 
+          peso_total: (notasFrete.length * 10),
+          frete_empresa: freteEmpresa,
+          frete_saida_motorista: freteSaidaMoto,
+          quantidade_entregas:notasFrete.length,
+          motorista: {
+            cpf_cnpj:motorista.cpf_cnpj,
+            gerenciamento_risco: null,
+            name:motorista.name,
+            placa:motorista.placa,
+            tipo_veiculo:null
+          },
+          notas: notasFrete.map(nota => nota.id)  // teste enviando somente os Ids
+        }))
 
         setSearchMotorista(null)
         setFreteEmpresa('')
@@ -104,6 +108,7 @@ export function LancamentoFrete(){
     },[motorista, notasFrete])
 
     const placaInput = searchMotorista ? searchMotorista.placa : ''
+
     return(
       <main>
         <Section title={"Lançamento de Frete"}>
