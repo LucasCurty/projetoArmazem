@@ -18,7 +18,8 @@ export class FretesService {
               connect: data.motorista as any
             },
             notas: {
-                // interar notas
+                connect: {id:data.notas.id} //arrumando
+                
             }
         }
 

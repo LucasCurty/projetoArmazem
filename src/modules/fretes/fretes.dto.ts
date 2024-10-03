@@ -8,5 +8,5 @@ export interface FreteDTO {
     quantidade_entregas: number;
     motorista?: string;
     
-    notas: NotasDTO[];
+    notas: NotasDTO;
 }
