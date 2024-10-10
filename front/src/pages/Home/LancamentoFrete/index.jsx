@@ -9,6 +9,8 @@ import { api } from '../../../services/api'
 export function LancamentoFrete(){
     const [moto, setMoto] = useState([])
     const [motorista, setMotorista] = useState({})
+    const [searchMotorista, setSearchMotorista] = useState(null)
+
     const [notasFrete, setNotasFrete] = useState([])
     const [freteEmpresa, setFreteEmpresa] = useState('')
     const [freteSaidaMoto, setFreteSaidaMoto] = useState('')
@@ -16,7 +18,6 @@ export function LancamentoFrete(){
 
 
 
-    const [searchMotorista, setSearchMotorista] = useState(null)
     const [cidades, setCidades] = useState([])
 
     const [mydate, setMyDate] = useState({
@@ -33,13 +34,15 @@ export function LancamentoFrete(){
         years: data[0],
       })
     }
+    async function getNotas() {
+      const response = await api.get(`/notas/${motorista.id}`)
+      setNotasFrete(response.data)
+  }
 
-
-    function selectMotorista(event){
+    async function selectMotorista(event){
         setMotorista(event)
         setSearchMotorista(event)
-
-
+        getNotas()
     }
 
     async function addFrete(){
@@ -70,6 +73,7 @@ export function LancamentoFrete(){
         setFreteEmpresa('')
         setFreteSaidaMoto('')
         setMotorista({})
+        setNotasFrete([])
       }
     
     useEffect(()=>{
@@ -80,15 +84,7 @@ export function LancamentoFrete(){
         getMotorista()
     },[searchMotorista])
 
-    useEffect(()=>{
-        async function getNotas() {
-            const response = await api.get(`/notas=${moto.id}`)
-            setNotasFrete(response.data)
 
-        }
-        getNotas()
-        console.log(notasFrete)
-    },[moto])
 
     useEffect(()=>{
       const getCidades = notasFrete.map(notas => (notas.cidade))
