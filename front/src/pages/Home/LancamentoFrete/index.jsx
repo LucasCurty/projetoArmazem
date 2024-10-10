@@ -82,12 +82,12 @@ export function LancamentoFrete(){
 
     useEffect(()=>{
         async function getNotas() {
-            const response = await api.get(`/notas`)
+            const response = await api.get(`/notas=${moto.id}`)
             setNotasFrete(response.data)
 
         }
         getNotas()
-
+        console.log(notasFrete)
     },[moto])
 
     useEffect(()=>{
@@ -102,13 +102,13 @@ export function LancamentoFrete(){
       <main>
         <Section title={"Lançamento de Frete"}>
             <Frete>
-              {
+              {/* {
                 <div className='data'>
                   <label>DATA</label>
                   <br />
                   <input type="date" onChange={e => handleChangeDate(e.target.value)} />
                 </div>
-              }
+              } */}
               <InsertValues >
                 <div className='infPlaca'>
                   <label>PLACA: </label>

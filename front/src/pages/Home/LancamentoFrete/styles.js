@@ -79,8 +79,7 @@ export const InsertValues = styled.form`
 export const LancarFrete = styled.div`
     display: flex;
     flex-direction: row;
-    background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
-    padding: 1rem 0px;
+    padding: 1rem;
 `;
 
 export const Labels = styled.div`

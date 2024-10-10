@@ -13,6 +13,10 @@ export class NotasController {
     return this.notasService.createNota(data);
   }
 
+  @Get(":idMotorista")
+  async findNotasFrete(@Param("idMotorista") idMotorista: number){
+    return this.notasService.findNotasinFrete(idMotorista);
+  }
   @Get()
   async findAll(){
     return this.notasService.findAllNotas();
