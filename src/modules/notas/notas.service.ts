@@ -26,14 +26,18 @@ export class NotasService {
         const notasFrete = await this.prisma.nota.findMany({
             where: {
                 motoristaId: Number(idMotorista),
-            },
+            }
         });
 
         return notasFrete;
 }
 
     async findAllNotas(){
-        return await this.prisma.nota.findMany()
+        return await this.prisma.nota.findMany({
+            include:{
+                motorista:true
+            }
+        })
     }
     async finOneNote(id: number){
         return await this.prisma.nota.findMany({
