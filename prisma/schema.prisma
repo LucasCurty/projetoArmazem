@@ -14,8 +14,8 @@ model User {
   password String
   avatar   String?
 
-  created_at DateTime @default(now())
-
+  created_at    DateTime      @default(now())
+  
 
   @@map("users")
 }
@@ -36,9 +36,8 @@ model Nota {
 
   observacoes String?
   motoristaId Int?
-  motorista   Motorista? @relation(fields: [motoristaId], references: [id])
-
-  fretes Frete[]
+  motorista   Motorista?    @relation(fields: [motoristaId], references: [id])
+  frete Frete[]
 
   @@map("notas")
 }
@@ -68,20 +67,7 @@ model Frete {
   motorista   Motorista? @relation(fields: [motoristaId], references: [id])
   motoristaId Int?
 
-  notas   Nota[]
+  notas Nota[]
 
   @@map("fretes")
 }
-
-// model NotasinFretes {
-//   nota    Nota[]  @relation(fields: [notaId], references: [id])
-//   notaId  Int
-//   frete   Frete[] @relation(fields: [freteId], references: [id])
-//   freteId Int
-
-//   create_at DateTime @default(now())
-//   user      User     @relation(fields: [userId], references: [id])
-//   userId    String
-
-//   @@id([notaId, freteId])
-// }

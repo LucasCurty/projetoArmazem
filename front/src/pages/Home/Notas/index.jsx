@@ -13,15 +13,17 @@ export function Notas(){
     useEffect(()=>{
         async function fetchNotes(){
             const response = await api.get(`/notas`)
-            setNotas(response.data);
+            setNotas([response.data.id, ... response.data]);
         }
+
     
         fetchNotes();
     },[])
     
     return(
         <Section title="Minhas Notas">
-            {notas && <Tabela data={notas} customKeys={keysHeadTable}/>}
+            {console.log(notas)}
+            {/* {notas && <Tabela data={notas} customKeys={keysHeadTable}/>} */}
         </Section>
     );
 }

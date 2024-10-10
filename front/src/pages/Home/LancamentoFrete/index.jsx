@@ -46,23 +46,8 @@ export function LancamentoFrete(){
       if(!freteEmpresa || !freteSaidaMoto){
         return alert("nao existe frete empresa ou frete saida")
       }
-
-      // await api.post('fretes',
-      //   { 
-      //     data: Date.now(),
-      //     pesoTotal: (notasFrete.length * 10),
-      //     freteEmpresa,
-      //     freteSaidaMoto,
-      //     quantidadeEntregas:notasFrete.length,
-      //     motorista: motorista.name,
-      //     placa: motorista.placa,
-      //     notasFrete 
-      //   }
-      // )
-      // .then(res => console.log(res.data))
-      // .catch(error => console.log(error.data))
-      
-        console.log(JSON.stringify({ 
+      await api.post('fretes',
+        { 
           peso_total: (notasFrete.length * 10),
           frete_empresa: freteEmpresa,
           frete_saida_motorista: freteSaidaMoto,
@@ -74,8 +59,12 @@ export function LancamentoFrete(){
             placa:motorista.placa,
             tipo_veiculo:null
           },
-          notas: notasFrete.map(nota => nota.id)  // teste enviando somente os Ids
-        }))
+          notas: notasFrete  // teste enviando somente os Ids
+        }
+      )
+      .then(res => console.log(res.data))
+      .catch(error => console.log(error.data))
+      
 
         setSearchMotorista(null)
         setFreteEmpresa('')
