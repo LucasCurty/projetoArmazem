@@ -23,5 +23,8 @@ export const TBody = styled.tbody`
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
 
    }
+   > tr td{
+        
+    }
 
 `;
