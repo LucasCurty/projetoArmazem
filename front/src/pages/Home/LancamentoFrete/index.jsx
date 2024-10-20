@@ -15,9 +15,6 @@ export function LancamentoFrete(){
     const [freteEmpresa, setFreteEmpresa] = useState('')
     const [freteSaidaMoto, setFreteSaidaMoto] = useState('')
 
-
-
-
     const [cidades, setCidades] = useState([])
 
     const [mydate, setMyDate] = useState({
@@ -26,6 +23,7 @@ export function LancamentoFrete(){
       years: new Date().getFullYear(),
     })
 
+    //lancar data do frete -- atualmente desativada
     function handleChangeDate(e){
       const data = String(e).split('-')
       setMyDate({
@@ -34,15 +32,16 @@ export function LancamentoFrete(){
         years: data[0],
       })
     }
-    async function getNotas() {
-      const response = await api.get(`/notas/${motorista.id}`)
+    async function getNotas(moto) {
+      const response = await api.get(`/notas/${moto.id}`)
       setNotasFrete(response.data)
-  }
+    }
 
     async function selectMotorista(event){
+      console.log(event)
         setMotorista(event)
         setSearchMotorista(event)
-        getNotas()
+        getNotas(event)
     }
 
     async function addFrete(){
@@ -50,7 +49,8 @@ export function LancamentoFrete(){
         return alert("nao existe frete empresa ou frete saida")
       }
       await api.post('fretes',
-        { 
+        
+          { 
           peso_total: (notasFrete.length * 10),
           frete_empresa: freteEmpresa,
           frete_saida_motorista: freteSaidaMoto,
@@ -62,7 +62,7 @@ export function LancamentoFrete(){
             placa:motorista.placa,
             tipo_veiculo:null
           },
-          notas: notasFrete  // teste enviando somente os Ids
+          notas: {notasFrete}  // teste enviando somente os Ids
         }
       )
       .then(res => console.log(res.data))
@@ -81,16 +81,22 @@ export function LancamentoFrete(){
             const response = await api.get(`/motorista/${searchMotorista}`)
             setMoto(response.data)
         }
+        async function getNotas(moto) {
+          const response = await api.get(`/notas/${moto.id}`)
+          setNotasFrete(response.data)
+        }
         getMotorista()
+        
     },[searchMotorista])
 
 
 
     useEffect(()=>{
+      
       const getCidades = notasFrete.map(notas => (notas.cidade))
       setCidades([... new Set(getCidades)])
 
-    },[motorista, notasFrete])
+    },[searchMotorista, notasFrete])
 
     const placaInput = searchMotorista ? searchMotorista.placa : ''
 
@@ -137,17 +143,17 @@ export function LancamentoFrete(){
 
             <Labels>
                 <label>MOTORISTA </label>
-                <p>{motorista.name}</p>    
+                <p>{motorista.name ? motorista.name : "#"}</p>    
                 <label>PLACA </label>
-                <p>{motorista.placa}</p>    
+                <p>{motorista.placa ? motorista.placa : "#"}</p>    
                 <label>TIPO DE VEICULO </label>
-                <p>{motorista.tipo_veiculo}</p>    
+                <p>{motorista.tipo_veiculo ? motorista.tipo_veiculo : "#"}</p>    
             </Labels>
             <Labels>
                 <label>FRETE EMPRESA</label>
-                <p>{freteEmpresa}</p>
+                <p>{freteEmpresa ? freteEmpresa + ' R$' : ' ----- R$'}</p>
                 <label>FRETE MOTORISTA</label>
-                <p>{freteSaidaMoto}</p>
+                <p>{freteSaidaMoto ? freteSaidaMoto + ' R$':' ----- R$'}</p>
             </Labels>
             <Labels>
               <label>CIDADES DESTINO</label>
@@ -168,7 +174,7 @@ export function LancamentoFrete(){
                           <p><span>Endereço:</span> {note.endereco_destinatario}</p>
                           <p><span>Peso:</span> {note.peso}</p>
                           <p><span>Valor:</span> {note.valor_nota}</p>
-                          <p><span>Tipo:</span> {note.tipo}</p>
+                          <p><span>Tipo:</span> {note.tipo_produto}</p>
                           <p><span>Obs:</span> {note.observacoes}</p>
                         </div>
                       </div>

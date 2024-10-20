@@ -37,6 +37,7 @@ model Nota {
   observacoes String?
   motoristaId Int?
   motorista   Motorista?    @relation(fields: [motoristaId], references: [id])
+  
   frete Frete[]
 
   @@map("notas")
@@ -68,6 +69,7 @@ model Frete {
   motoristaId Int?
 
   notas Nota[]
+  
 
   @@map("fretes")
 }
