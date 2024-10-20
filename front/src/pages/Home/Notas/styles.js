@@ -1,4 +1,5 @@
 import styled from "styled-components";
+ 
 
 export const Table = styled.table`
     border-collapse: collapse;
@@ -18,12 +19,51 @@ export const THead = styled.thead `
 `;
 
 export const TBody = styled.tbody`
+    .buttns{
+        
+        > button{
+            font-size: 1rem;
+            padding: 1px 3px;
+            border: none;
+            border-radius: 3px;
+            color: ${({theme})=> theme.COLORS.BACKGROUND_800};
+        }
+        
+        > button:hover{
+        background-color: ${({theme})=> theme.COLORS.ORANGE};
+        color: white;
+        
+        }
+        >div .enviar:hover{
+            background-color: ${({theme})=> theme.COLORS.ORANGE};
+            color: white;
+        }
+        >div .cancel:hover{
+            background-color: ${({theme})=> theme.COLORS.RED};
+            color: white;
+
+        }
+    }
    
    > tr:hover{
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
 
    }
-   > tr td{
+   > tr td div {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+
+        >select{
+            border: none;
+            border-radius: 6px;
+            margin-right: 8px;
+            background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+            color: white;
+
+        }
+        
+
         
     }
 
