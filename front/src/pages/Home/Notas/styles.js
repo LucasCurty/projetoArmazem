@@ -12,6 +12,22 @@ export const Table = styled.table`
          border: 1px solid rgb(160 160 160);
         padding: 8px 10px;
     }
+    > span{
+        padding: 1rem;
+        border: 1px solid white;
+        border-radius: 15px;
+        position: absolute;
+        top: 0;
+        right: 15%;
+    }
+    > .sucess{
+        background-color:  ${({theme})=> theme.COLORS.ORANGE};
+        font-size: 1rem;
+
+    }
+    > .denid{
+        background-color:  ${({theme})=> theme.COLORS.RED};
+    }
 `;
 
 export const THead = styled.thead `

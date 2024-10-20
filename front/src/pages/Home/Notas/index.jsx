@@ -8,36 +8,79 @@ import { THead, TBody, Table} from './styles';
 
 export function Notas(){
   // state de consumir api notas
-    const [fetchNotas, setfetchNotas] = useState([])
-    const [reFetchNotas, setReFethNotas] = useState(false)
+  const [fetchNotas, setfetchNotas] = useState([])
+  const [reFetchNotas, setReFethNotas] = useState(false)
+  const [fetchMotoristas, setFetchMotoristas] = useState([])
 
-    // teste
-    const [isTrue, setIsTrue] = useState(false)
+  // teste
+  const [isTrue, setIsTrue] = useState(false)
 
-    //state de tipo de produto
-    const [changeNota, setChangeNota] = useState([])
-    const [valueChange, setValueChange] = useState('FRIO')
+  //state de tipo de produto
+  const [changeNota, setChangeNota] = useState([])
+  const [valueChange, setValueChange] = useState('')
 
-    //state de data embarque - 
-    const [dataEmbarque, setDataEmbarque] = useState()
+  //state de data embarque - 
+  const [dataEmbarque, setDataEmbarque] = useState()
+
+  //state de motorista
+  const [placa, setPlaca] = useState({})
+  
+  //starte de observação
+  const [observacoesNF, setObservacoes] = useState('')
+
+  //state message
+  const [msg, setMsg] = useState('')
+  const [msgClass, setMsgClass] = useState('')
+
 
   const keysHeadTable = ["","NUMERO_NF", "CLIENTE","DESTINATARIO", "ENDERECO_DESTINATARIO","CIDADE", "PESO","VALOR_NF", "TIPO_PRODUTO", "DATA_EMBARQUE", "PLACA", "OBSERVAÇÕES "]
 
-  async function handleChangeInfomationOfNote(nf){ // funcao para pegar a nota e adita
+  async function handleSelectMotorista(placa){
+    const searchMoto = fetchMotoristas.filter(fetchMotoristas => fetchMotoristas.placa == placa)
+    setPlaca(searchMoto[0])
+
+  }
+
+  function handleChangeInfomationOfNote(nf){ // funcao para pegar a nota e adita
     setChangeNota(nf)
     setIsTrue(!isTrue)
-    console.log(changeNota)
-
   } 
+
+  function handleTypeObservacao(e){
+    setObservacoes(e)
+  }
+
+
   async function changeInfoNote(nf){  
-    await api.put(`/notas/${nf.id}`, {
-      tipo_produto: String(valueChange).toUpperCase(),
-      data_saida: new Date(dataEmbarque),
+       await api.put(`/notas/${nf.id}`, {
+        tipo_produto: valueChange ? valueChange : nf.tipo_produto,
+        data_saida: dataEmbarque ? new Date(dataEmbarque) : nf.data_saida,
+        motoristaId: placa.id ? placa.id : nf.motoristaId,
+        observacoes: observacoesNF ? observacoesNF : nf.observacoes,
     })
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err))
-    .finally(console.log(`O stats ${valueChange} foi adicionado a nota ${nf.numero_nota}`))
+    .then(
+      setMsg(`A nota ${nf.numero_nota} foi alterada com sucesso!`),
+      setMsgClass('sucess'),
+      setTimeout(()=>{
+        setMsg('')
+      },[2500])
+
+    )
+    .catch(err => {
+      setMsg(`Não foi possivel alterar a nota ${nf.numero_nota}, erro: ${err}`)
+      setMsgClass('denid'),
+      setTimeout(()=>{
+        setMsg('')
+      },[2500])
+    })
     setReFethNotas(!reFetchNotas)
+    setValueChange('')
+    setDataEmbarque('')
+    setObservacoes('')
+    setPlaca({})
+    setChangeNota([])
+    setFetchMotoristas([])
+    
   }
 
   useEffect(()=>{
@@ -45,13 +88,20 @@ export function Notas(){
       const response = await api.get(`/notas`)
       setfetchNotas(response.data);
     }
+
+    async function fetchPlacas() {
+      const placaResponse = await api.get(`/motorista`)
+      setFetchMotoristas(placaResponse.data)
+    }
     
       fetchNotes();
+      fetchPlacas();
     },[reFetchNotas])
     
     return(
         <Section title="Minhas Notas">
             <Table>
+                { msg &&  <span className={msgClass}>{msg}</span>}
               <THead>
                   <tr>
                   {
@@ -62,7 +112,6 @@ export function Notas(){
                   </tr>
               </THead>
               <TBody>
-
                   {fetchNotas && 
                     fetchNotas.map(nota => ( 
                       <tr key={String(nota.id)}>
@@ -87,9 +136,10 @@ export function Notas(){
                           {
                             changeNota == nota ?
                             <div>
-                              <select name="test" id="" onChange={(e)=> setValueChange(e.target.value)}>
-                                <option value="frio">FRIO</option>
-                                <option value="seco">SECO</option>
+                              <select name="tipoProduto"  onChange={(e)=> setValueChange(e.target.value)}>
+                                <option></option>
+                                <option>REFRIGERADO</option>
+                                <option >SECO</option>
                               </select>
                             </div>
                             :
@@ -114,8 +164,28 @@ export function Notas(){
                               
                             }
                           </td>
-                          <td>{nota.motorista?.placa}</td>
-                          <td>{nota.obeservacoes}</td>
+                          <td>
+                            { changeNota == nota ?
+                              <div>
+                                <select name="placaMotorista" onChange={e => handleSelectMotorista(e.target.value)}>
+                                  {fetchMotoristas.map(moto => (
+                                    <option>{moto.placa}</option>
+                                  ))}
+                                </select>
+                              </div>
+                              :
+                              <div>
+                                {nota.motorista ?  nota.motorista?.placa :'-'}
+                              </div>
+                            }
+                          </td>
+                          <td>
+                            { changeNota == nota ?
+                                <input type="text"  onChange={e => handleTypeObservacao(e.target.value)}/> 
+                              :
+                              nota.observacoes ? nota.observacoes : '-'
+                          
+                          }</td>
                       </tr>
                   ))
                   }

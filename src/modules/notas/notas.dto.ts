@@ -8,4 +8,7 @@ export type NotasDTO = {
     peso: string;
     valor_nota: string;
     tipo_produto?: string;
+    data_saida?: Date;
+    motoristaId?: number;
+    observacoes?: string;
 }

@@ -63,8 +63,14 @@ export class NotasService {
         }
 
         return await this.prisma.nota.update({
-            data,
-            where:{ id: Number(id) }
+            where:{ id: Number(id) },
+            data:{
+                ...data,
+                data_saida: data?.data_saida,
+                motoristaId: data?.motoristaId,
+                tipo_produto: data?.tipo_produto,
+                observacoes: data?.observacoes,
+            }
         })
     }
 
