@@ -23,14 +23,9 @@ export function Tabela({ data, customKeys }) {
   return (
         <MyTabela>
         <Head keys={customKeys}/>
-        <tbody>
-            { data?.map(line=> (
-                <>
-                    <Row line={line}/> 
-                    {console.log(data.motorista)}
-                </>
-            ))}
-        </tbody>
+            <tbody>
+                { data?.map(line=> (<Row line={line}/>))}
+            </tbody>
         </MyTabela>
   );
 }
