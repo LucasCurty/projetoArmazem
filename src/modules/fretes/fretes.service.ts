@@ -7,11 +7,7 @@ export class FretesService {
     constructor(private prisma: PrismaService){}
 
     async createFrete(data: FreteDTO) {
-        // const notas = await this.prisma.nota.findMany({
-        //     where:{
-        //         numero_nota: data.notas.numero_nota
-        //     }
-        // })
+        console.log(data.notas)
         const createFrete = await this.prisma.frete.create({
           data: {
             peso_total: data.peso_total,
@@ -22,7 +18,8 @@ export class FretesService {
               connect: data.motorista as any
             },
             notas:{
-                connect: data.notas.numero_nota as any
+                connect :  data.notas.map(notaID => ({id: notaID.id})),                   
+                
             } 
             
 

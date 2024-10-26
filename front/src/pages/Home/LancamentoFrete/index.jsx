@@ -47,8 +47,7 @@ export function LancamentoFrete(){
         return alert("nao existe frete empresa ou frete saida")
       }
       await api.post('fretes',
-        
-          { 
+        { 
           peso_total: (notasFrete.length * 10),
           frete_empresa: freteEmpresa,
           frete_saida_motorista: freteSaidaMoto,
@@ -60,13 +59,10 @@ export function LancamentoFrete(){
             placa: selectedMotorista.placa,
             tipo_veiculo: selectedMotorista.tipo_veiculo ?? null
           },
-          notas: {notasFrete}  // teste enviando somente os Ids
-        }
-      )
+          notas: notasFrete  // teste enviando somente os Ids
+        })      
       .then(res => console.log(res.data))
       .catch(error => console.log(error.data))
-      
-
         setInputMotorista(null)
         setFreteEmpresa('')
         setFreteSaidaMoto('')
@@ -91,14 +87,10 @@ export function LancamentoFrete(){
           motoristaId: motorista.id,
           data_saida: new Date(data.fullDate).toISOString()
         }})
-
-        console.log(response.data)
-        // setNotasFrete(response.data)
+        setNotasFrete(response.data)
       }
-
-      if(selectedMotorista.id && mydate.fullDate){
-        getNotas(selectedMotorista, mydate)
-        // console.log(new Date(mydate.fullDate).toISOString(), selectedMotorista)  //Verificando os dados
+      if(selectedMotorista.id && mydate.fullDate){ // verificando se existe os 2 dados antes de executar o fetch
+        getNotas(selectedMotorista, mydate) 
       }
 
     },[selectedMotorista, mydate])
