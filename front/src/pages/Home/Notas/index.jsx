@@ -12,8 +12,6 @@ export function Notas(){
   const [reFetchNotas, setReFethNotas] = useState(false)
   const [fetchMotoristas, setFetchMotoristas] = useState([])
 
-  // teste
-  const [isTrue, setIsTrue] = useState(false)
 
   //state de tipo de produto
   const [changeNota, setChangeNota] = useState([])
@@ -41,9 +39,8 @@ export function Notas(){
 
   }
 
-  function handleChangeInfomationOfNote(nf){ // funcao para pegar a nota e adita
+  function handleChangeInfomationOfNote(nf){ // funcao para pegar a nota e aditar
     setChangeNota(nf)
-    setIsTrue(!isTrue)
   } 
 
   function handleTypeObservacao(e){
