@@ -22,12 +22,16 @@ export class NotasService {
 
     }
 
-   async findNotasinFrete(idMotorista: number) {
-        const notasFrete = await this.prisma.nota.findMany({
-            where: {
-                motoristaId: Number(idMotorista),
-            }
-        });
+   async findNotasinFrete(idMotorista: number, data_saida: Date) {
+    const notasFrete = await this.prisma.nota.findMany({
+      where: {
+          motoristaId: Number(idMotorista), 
+          data_saida: { 
+            equals: data_saida  
+        }
+      },
+
+    });
 
         return notasFrete;
 }

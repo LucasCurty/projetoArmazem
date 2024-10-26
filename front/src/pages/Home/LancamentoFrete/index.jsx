@@ -7,9 +7,9 @@ import {LancarFrete, Labels, Frete, InsertValues} from './styles'
 import { api } from '../../../services/api'
 
 export function LancamentoFrete(){
-    const [moto, setMoto] = useState([])
-    const [motorista, setMotorista] = useState({})
-    const [searchMotorista, setSearchMotorista] = useState(null)
+    const [apiMotorista, setApiMotorista] = useState([])
+    const [selectedMotorista, setSelectedMotorista] = useState({})
+    const [inputMotorista, setInputMotorista] = useState(null)
 
     const [notasFrete, setNotasFrete] = useState([])
     const [freteEmpresa, setFreteEmpresa] = useState('')
@@ -21,27 +21,25 @@ export function LancamentoFrete(){
       day: (new Date().getDate()).toString().padStart(2,'0'),
       months: (new Date().getMonth() + 1).toString().padStart(2, '0'),
       years: new Date().getFullYear(),
+      fullDate: new Date().toISOString()
+      
     })
 
-    //lancar data do frete -- atualmente desativada
+    //lancar data do frete 
     function handleChangeDate(e){
       const data = String(e).split('-')
       setMyDate({
+        fullDate: e,
         day: data[2],
         months: data[1],
         years: data[0],
       })
     }
-    async function getNotas(moto) {
-      const response = await api.get(`/notas/${moto.id}`)
-      setNotasFrete(response.data)
-    }
+
 
     async function selectMotorista(event){
-      console.log(event)
-        setMotorista(event)
-        setSearchMotorista(event)
-        getNotas(event)
+        setSelectedMotorista(event)
+        setInputMotorista(event)
     }
 
     async function addFrete(){
@@ -56,11 +54,11 @@ export function LancamentoFrete(){
           frete_saida_motorista: freteSaidaMoto,
           quantidade_entregas:notasFrete.length,
           motorista: {
-            cpf_cnpj:motorista.cpf_cnpj,
-            gerenciamento_risco: null,
-            name:motorista.name,
-            placa:motorista.placa,
-            tipo_veiculo:null
+            cpf_cnpj: selectedMotorista.cpf_cnpj,
+            gerenciamento_risco: selectedMotorista.gerenciamento_risco ?? null,
+            name: selectedMotorista.name,
+            placa: selectedMotorista.placa,
+            tipo_veiculo: selectedMotorista.tipo_veiculo ?? null
           },
           notas: {notasFrete}  // teste enviando somente os Ids
         }
@@ -69,55 +67,67 @@ export function LancamentoFrete(){
       .catch(error => console.log(error.data))
       
 
-        setSearchMotorista(null)
+        setInputMotorista(null)
         setFreteEmpresa('')
         setFreteSaidaMoto('')
-        setMotorista({})
+        setSelectedMotorista({})
         setNotasFrete([])
       }
     
-    useEffect(()=>{
+      useEffect(()=>{
         async function getMotorista(){
-            const response = await api.get(`/motorista/${searchMotorista}`)
-            setMoto(response.data)
-        }
-        async function getNotas(moto) {
-          const response = await api.get(`/notas/${moto.id}`)
-          setNotasFrete(response.data)
+            const response = await api.get(`/motorista/${inputMotorista}`)
+            setApiMotorista(response.data)
         }
         getMotorista()
         
-    },[searchMotorista])
-
-
+    },[inputMotorista])
 
     useEffect(()=>{
       
+      async function getNotas(motorista, data) {
+        const response = await api.get(`/notas`, {
+          params:{
+          motoristaId: motorista.id,
+          data_saida: new Date(data.fullDate).toISOString()
+        }})
+
+        console.log(response.data)
+        // setNotasFrete(response.data)
+      }
+
+      if(selectedMotorista.id && mydate.fullDate){
+        getNotas(selectedMotorista, mydate)
+        // console.log(new Date(mydate.fullDate).toISOString(), selectedMotorista)  //Verificando os dados
+      }
+
+    },[selectedMotorista, mydate])
+
+    useEffect(()=>{
       const getCidades = notasFrete.map(notas => (notas.cidade))
       setCidades([... new Set(getCidades)])
+    },[notasFrete])
 
-    },[searchMotorista, notasFrete])
-
-    const placaInput = searchMotorista ? searchMotorista.placa : ''
+    const placaInput = inputMotorista ? inputMotorista.placa : ''
 
     return(
       <main>
         <Section title={"Lançamento de Frete"}>
             <Frete>
-              {/* {
+              {
                 <div className='data'>
                   <label>DATA</label>
                   <br />
                   <input type="date" onChange={e => handleChangeDate(e.target.value)} />
                 </div>
-              } */}
+              }
               <InsertValues >
                 <div className='infPlaca'>
                   <label>PLACA: </label>
-                  <input type="text" name='placa' value={placaInput} placeholder='Pesquisar Placa' onChange={e => setSearchMotorista(e.target.value)}  />
+                  <input type="text" name='placa' value={placaInput} placeholder='Pesquisar Placa' onChange={e => setInputMotorista(e.target.value)}  />
                   <div>
-                    { searchMotorista &&
-                        moto.map((motorista,index) => (
+                    { inputMotorista &&
+                        apiMotorista.map((motorista,index) => (
                           <option key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </option>
                         ))
                       }
@@ -143,11 +153,11 @@ export function LancamentoFrete(){
 
             <Labels>
                 <label>MOTORISTA </label>
-                <p>{motorista.name ? motorista.name : "#"}</p>    
+                <p>{selectedMotorista.name ? selectedMotorista.name : "#"}</p>    
                 <label>PLACA </label>
-                <p>{motorista.placa ? motorista.placa : "#"}</p>    
+                <p>{selectedMotorista.placa ? selectedMotorista.placa : "#"}</p>    
                 <label>TIPO DE VEICULO </label>
-                <p>{motorista.tipo_veiculo ? motorista.tipo_veiculo : "#"}</p>    
+                <p>{selectedMotorista.tipo_veiculo ? selectedMotorista.tipo_veiculo : "#"}</p>    
             </Labels>
             <Labels>
                 <label>FRETE EMPRESA</label>

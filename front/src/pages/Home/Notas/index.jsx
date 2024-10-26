@@ -50,7 +50,6 @@ export function Notas(){
     setObservacoes(e)
   }
 
-
   async function changeInfoNote(nf){  
        await api.put(`/notas/${nf.id}`, {
         tipo_produto: valueChange ? valueChange : nf.tipo_produto,

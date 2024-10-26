@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post,Get, Put, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Post,Get, Put, Delete, UseGuards, Query } from '@nestjs/common';
 import { NotasService } from './notas.service';
 import { NotasDTO } from './notas.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,9 +13,9 @@ export class NotasController {
     return this.notasService.createNota(data);
   }
 
-  @Get(":idMotorista")
-  async findNotasFrete(@Param("idMotorista") idMotorista: number){
-    return this.notasService.findNotasinFrete(idMotorista);
+  @Get()
+  async findNotasFrete(@Query('motoristaId') motoristaId: number, @Query('data_saida') data_saida: Date){
+    return this.notasService.findNotasinFrete(motoristaId, data_saida);
   }
   @Get()
   async findAll(){
