@@ -13,8 +13,8 @@ export class NotasController {
     return this.notasService.createNota(data);
   }
 
-  @Get()
-  async findNotasFrete(@Query('motoristaId') motoristaId: number, @Query('data_saida') data_saida: Date){
+  @Get(':motoristaId')
+  async findNotasFrete(@Param('motoristaId') motoristaId: number, @Query('data_saida') data_saida: Date){
     return this.notasService.findNotasinFrete(motoristaId, data_saida);
   }
   @Get()

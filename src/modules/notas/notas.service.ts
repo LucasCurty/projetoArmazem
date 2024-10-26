@@ -43,6 +43,7 @@ export class NotasService {
             }
         })
     }
+
     async finOneNote(id: number){
         return await this.prisma.nota.findMany({
             where:{ motoristaId: id},

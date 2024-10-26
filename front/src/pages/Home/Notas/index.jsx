@@ -12,7 +12,6 @@ export function Notas(){
   const [reFetchNotas, setReFethNotas] = useState(false)
   const [fetchMotoristas, setFetchMotoristas] = useState([])
 
-
   //state de tipo de produto
   const [changeNota, setChangeNota] = useState([])
   const [valueChange, setValueChange] = useState('')

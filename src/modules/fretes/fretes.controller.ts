@@ -20,7 +20,7 @@ export class FretesController {
 
   @Put(":id")
   async update(@Param("id") id:number, @Body() data: FreteDTO){
-    return this.fretesService.updateFrete(+id,data);
+    return this.fretesService.updateFrete(id,data);
   }
 
   @Delete(":id")

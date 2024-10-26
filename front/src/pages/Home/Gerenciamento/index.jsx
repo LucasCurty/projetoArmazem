@@ -9,7 +9,7 @@ import { FiEdit, FiCheckSquare, FiXSquare} from 'react-icons/fi'
 export function Gerenciamento(){
   const [fetchFretes, setFetchFretes] = useState([])
   const [editingFrete, setEditingFrete] = useState([])
-
+  const [hasSaveFrete, setHasSaveFrete] = useState(false)
 
   // status dos fretes
   const [freteEmpresa, setFreteEmpresa] = useState()
@@ -18,7 +18,7 @@ export function Gerenciamento(){
   const [kmFinal, setKmFinal] = useState(0)
 
 
-  const THead = ["","N° FRETE", "DATA", "FRETE EMPRESA", "FRETE SAIDA MOTO", "PESO", "QUA. ENTREGAS", "KM INICIAL", "KM FINAL", "KM TOTAL" ]
+  const THead = ["","N° FRETE", "DATA", "FRETE EMPRESA", "FRETE SAIDA MOTO", "PESO", "QUA. ENTREGAS", "KM INICIAL", "KM FINAL", "KM EXTRA" ]
    
   function handleEditFrete(frete){
     setEditingFrete(frete)
@@ -28,13 +28,24 @@ export function Gerenciamento(){
     setKmFinal(frete.km_final)
   }
 
-  async function handleEditingFrete() {
-    // const response = await api.put(``)
-    console.log({
-      frete_empresa: freteEmpresa,
-      frete_saida_motorista: freteSaidaMotorista,
-      // terminar...
-    })
+  async function handleSendFreteEdited(frete) {
+    await api.put(`fretes/${frete.id}`, 
+      {
+        frete_empresa: freteEmpresa,
+        frete_saida_motorista: freteSaidaMotorista,
+        km_inicial: kmInicial,
+        km_final: kmFinal,
+      }
+    )
+    .then(res => console.log(res))
+    .catch(error => console.log(error))
+
+    setEditingFrete([])
+    setFreteEmpresa(0)
+    setFreteSaidaMotorista(0)
+    setKmInicial(0)
+    setKmFinal(0)
+    setHasSaveFrete(!hasSaveFrete)
   }
 
   
@@ -46,7 +57,7 @@ export function Gerenciamento(){
       }
   
         fetchFretes()
-      },[])
+      },[hasSaveFrete])
 
     return(
         <Section title="Gerenciamento">
@@ -67,7 +78,7 @@ export function Gerenciamento(){
                           <button onClick={ () => handleEditFrete(frete)}><FiEdit/></button>
                           :
                           <div>
-                            <button className='enviar' onClick={()=>{}}><FiCheckSquare /></button>
+                            <button className='enviar' onClick={ () => handleSendFreteEdited(frete)}><FiCheckSquare /></button>
                             <button className='cancel' onClick={() => handleEditFrete([])}><FiXSquare /></button>
                           </div>
                         
@@ -112,7 +123,7 @@ export function Gerenciamento(){
                         
                         <input type="number" onChange={e => setKmFinal(e.target.value)} placeholder={kmFinal}/>
                       } <span>Km</span></th>
-                    <th>{frete.km_inicial - frete.km_final} <span>Km</span></th>
+                    <th>{frete.km_final - frete.km_inicial} <span>Km</span></th>
 
                   </tr>
                   )) 

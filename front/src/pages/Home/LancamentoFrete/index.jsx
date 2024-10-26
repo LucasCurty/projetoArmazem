@@ -82,9 +82,8 @@ export function LancamentoFrete(){
     useEffect(()=>{
       
       async function getNotas(motorista, data) {
-        const response = await api.get(`/notas`, {
+        const response = await api.get(`/notas/${motorista.id}`, {
           params:{
-          motoristaId: motorista.id,
           data_saida: new Date(data.fullDate).toISOString()
         }})
         setNotasFrete(response.data)
