@@ -80,6 +80,8 @@ export const LancarFrete = styled.div`
     display: flex;
     flex-direction: row;
     padding: 1rem;
+    background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+
 `;
 
 export const Labels = styled.div`
@@ -93,7 +95,7 @@ export const Labels = styled.div`
     }
     > p{
         font-size: 1rem;
-        background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+        background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
         padding: 3px 8px;
         margin: 5px 0;
         width: fit-content;
