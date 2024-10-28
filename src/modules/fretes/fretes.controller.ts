@@ -18,9 +18,9 @@ export class FretesController {
     return this.fretesService.findAllFretes();
   }
 
-  @Put(":id")
-  async update(@Param("id") id:number, @Body() data: FreteDTO){
-    return this.fretesService.updateFrete(id,data);
+  @Put(":freteId")
+  async update(@Param("freteId") freteId:number, @Body() data: FreteDTO){
+    return this.fretesService.updateFrete(freteId,data);
   }
 
   @Delete(":id")

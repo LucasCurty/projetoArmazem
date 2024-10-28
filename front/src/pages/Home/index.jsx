@@ -10,6 +10,7 @@ import { ButtonText } from '../../Components/ButtonText'
 import {LancamentoFrete} from './LancamentoFrete'
 import {Gerenciamento} from './Gerenciamento'
 import {Notas} from './Notas'
+import { Motoristas } from './Motoristas'
 
 
 export function Home(){
@@ -48,6 +49,13 @@ export function Home(){
                         isActive={sectionActive === "Notas"}
                     />
                 </Link>
+                <Link>
+                    <ButtonText 
+                        onClick={(e)=>handleChangeSection(e.target.innerText)} 
+                        title="Motoristas"
+                        isActive={sectionActive === "Motoristas"}
+                    />
+                </Link>
             </Menu>
             <Content>
                
@@ -57,7 +65,10 @@ export function Home(){
 
                 {sectionActive === "Notas" && <Notas />}
                 
+                {sectionActive === "Motoristas" && <Motoristas />}
+                
             </Content>
+      
             <NewNote to="/new">
                 <FiPlus />
                 Cadastrar Notas

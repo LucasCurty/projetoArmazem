@@ -1,4 +1,5 @@
 export type motoristaDTO = {
+    id?: number
     name: string
     cpf_cnpj: string 
     placa: string

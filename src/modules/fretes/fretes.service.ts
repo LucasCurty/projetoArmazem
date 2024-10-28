@@ -7,15 +7,27 @@ export class FretesService {
     constructor(private prisma: PrismaService){}
 
     async createFrete(data: FreteDTO) {
-        console.log(data.notas)
+        // Verificação opcional
+        const motorista = await this.prisma.motorista.findUnique({
+            where: {
+                cpf_cnpj: data.motorista.cpf_cnpj
+            }
+        });
+        
+        if (!motorista) {
+            throw new Error('Motorista não encontrado');
+        }
+        
         const createFrete = await this.prisma.frete.create({
           data: {
-            peso_total: data.peso_total,
-            frete_empresa: Number(data.frete_empresa), 
+            peso_total: Number(data.peso_total),  // Convertendo para número
+            frete_empresa: Number(data.frete_empresa),
             frete_saida_motorista: Number(data.frete_saida_motorista),
             quantidade_entregas: Number(data.quantidade_entregas),
+            km_inicial: Number(data.km_inicial),
+            km_final: Number(data.km_final),    
             motorista: { 
-                connect: {id: data.motoristaId}
+                connect: {cpf_cnpj: data.motorista.cpf_cnpj }
              },
             notas:{
                 connect :  data.notas.map(notaID => ({id: notaID.id})),                   
@@ -29,29 +41,51 @@ export class FretesService {
       }        
       
     async findAllFretes(){
-        return await this.prisma.frete.findMany();
+        return await this.prisma.frete.findMany({
+            include:{
+                motorista: true
+            }
+        });
     }
 
-    async updateFrete(idMotorista: number, data: FreteDTO){
+    async updateFrete(freteId: number, data: FreteDTO){
+        // Verifica se o frete existe
         const freteExist = await this.prisma.frete.findFirst({
             where:{
-                id: Number(idMotorista)
+                id: Number(freteId) 
             }
-        })
+        });
         
         if(!freteExist){
-            throw new Error("Frete não encontrado")
+            throw new Error("Frete não encontrado");
         }
+
+        // Verifica se o novo motorista existe
+        const motoristaExist = await this.prisma.motorista.findUnique({
+            where: {
+                cpf_cnpj: data.motorista.cpf_cnpj
+            }
+        });
+
+        if(!motoristaExist){
+            throw new Error("Motorista não encontrado");
+        }
+
+        // Atualiza o frete com o novo motorista
         return await this.prisma.frete.update({
-            where:{ id: Number(idMotorista) },
             data:{
-                ...data,
-                frete_empresa: Number(data?.frete_empresa),
-                frete_saida_motorista: Number(data?.frete_saida_motorista),
-                km_inicial: Number(data?.km_inicial),
-                km_final: Number(data?.km_final)
-            } as any
-        })
+                peso_total: Number(data.peso_total),
+                frete_empresa: Number(data.frete_empresa),
+                frete_saida_motorista: Number(data.frete_saida_motorista),
+                quantidade_entregas: Number(data.quantidade_entregas),
+                km_inicial: Number(data.km_inicial),
+                km_final: Number(data.km_final),
+                motorista: {
+                    connect: {cpf_cnpj: motoristaExist.cpf_cnpj}
+                }
+            },
+            where:{ id: Number(freteId)}
+        });
     }
 
     async deleteFrete(id: number){

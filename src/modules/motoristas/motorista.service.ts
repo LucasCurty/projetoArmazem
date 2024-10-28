@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { motoristaDTO } from './motorista.dto';
 import { PrismaService } from 'src/database/PrismaService';
 
@@ -14,21 +14,17 @@ export class MotoristaService {
       })
 
       if(motoristaExist){
-          throw new Error("Motorista ja esta cadastrado!")
+          throw new ConflictException("Motorista ja esta cadastrado!")
       }      
 
-      await this.prisma.motorista.create({
+      return await this.prisma.motorista.create({
          data
       })
-      .then(res => {return res})
-      .catch(erro => {return erro})
     }
   
 
   async findAllMotorista() {
    return await this.prisma.motorista.findMany()
-    
-   
   }
 
   async findOneMotorista(placa: string) {
@@ -50,11 +46,11 @@ export class MotoristaService {
   
 
   if(!motoristaExist){
-      throw new Error("Motorista não encontrado")
+      throw new ConflictException("Motorista não encontrado")
   }
 
   if(motoristaExist && motoristaExist.cpf_cnpj !== data.cpf_cnpj){
-      throw new Error("Ja existe esse cnpj ou cpf cadastrado.")
+      throw new ConflictException("Ja existe esse cnpj ou cpf cadastrado.")
   }
 
   motoristaExist.name = data.name ?? motoristaExist.name;

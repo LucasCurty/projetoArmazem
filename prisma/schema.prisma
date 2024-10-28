@@ -73,3 +73,4 @@ model Frete {
 
   @@map("fretes")
 }
+

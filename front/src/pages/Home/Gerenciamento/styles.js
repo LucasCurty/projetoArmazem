@@ -19,4 +19,7 @@ export const Table = styled.table`
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
 
    }
+    span:hover {
+        cursor: pointer;
+    }
 `;

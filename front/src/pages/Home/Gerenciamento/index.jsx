@@ -10,31 +10,52 @@ export function Gerenciamento(){
   const [fetchFretes, setFetchFretes] = useState([])
   const [editingFrete, setEditingFrete] = useState([])
   const [hasSaveFrete, setHasSaveFrete] = useState(false)
+  const [motoristas, setMotoristas] = useState([])
+  const [placaEdit, setPlacaEdit] = useState("")
 
   // status dos fretes
   const [freteEmpresa, setFreteEmpresa] = useState()
   const [freteSaidaMotorista, setFreteSaidaMotorista] = useState()
   const [kmInicial, setKmInicial] = useState(0)
   const [kmFinal, setKmFinal] = useState(0)
+  const [pesoTotal, setPesoTotal] = useState(0)
+  const [quantidadeEntregas, setQuantidadeEntregas] = useState(0)
 
 
-  const THead = ["","N° FRETE", "DATA", "FRETE EMPRESA", "FRETE SAIDA MOTO", "PESO", "QUA. ENTREGAS", "KM INICIAL", "KM FINAL", "KM EXTRA" ]
+  const THead = ["","N° FRETE", "DATA", "FRETE EMPRESA", "FRETE SAIDA MOTO", "MARGEM", "PESO", "QUA. ENTREGAS", "KM INICIAL", "KM FINAL", "KM EXTRA","PLACA", "MOTORISTA" ]
    
+  // Adicionar função para buscar motoristas
+  useEffect(() => {
+    async function fetchMotoristas() {
+      const response = await api.get('/motorista')
+      setMotoristas(response.data)
+    }
+    fetchMotoristas()
+  }, [])
+
   function handleEditFrete(frete){
     setEditingFrete(frete)
     setFreteEmpresa(frete.frete_empresa)
     setFreteSaidaMotorista(frete.frete_saida_motorista)
     setKmInicial(frete.km_inicial)
     setKmFinal(frete.km_final)
+    setPlacaEdit(frete.motorista.placa)
+    setPesoTotal(frete.peso_total)
+    setQuantidadeEntregas(frete.quantidade_entregas)
   }
 
   async function handleSendFreteEdited(frete) {
+    const motoristaSelecionado = motoristas.find(m => m.placa === placaEdit)
+    
     await api.put(`fretes/${frete.id}`, 
       {
         frete_empresa: freteEmpresa,
         frete_saida_motorista: freteSaidaMotorista,
         km_inicial: kmInicial,
+        peso_total: pesoTotal,
+        quantidade_entregas: quantidadeEntregas,
         km_final: kmFinal,
+        motorista: motoristaSelecionado // adicionar ID do motorista
       }
     )
     .then(res => console.log(res))
@@ -46,6 +67,7 @@ export function Gerenciamento(){
     setKmInicial(0)
     setKmFinal(0)
     setHasSaveFrete(!hasSaveFrete)
+    setPlacaEdit("")
   }
 
   
@@ -108,6 +130,16 @@ export function Gerenciamento(){
                         }
                         <span>R$</span>
                     </th>
+                    <th>
+                      <span title={`Margem: R$${(frete.frete_empresa - frete.frete_saida_motorista).toFixed(2)}
+                        Cálculo: (${frete.frete_empresa} - ${frete.frete_saida_motorista}) ÷ ${frete.frete_empresa} × 100`}>
+                        {(() => {
+                          const margem = frete.frete_empresa - frete.frete_saida_motorista;
+                          const porcentagem = ((margem / frete.frete_empresa) * 100).toFixed(2);
+                          return `${porcentagem}%`;
+                        })()}
+                      </span>
+                    </th>
                     <th>{frete.peso_total} kg</th>
                     <th>{frete.quantidade_entregas}</th>
                     <th>{
@@ -124,7 +156,26 @@ export function Gerenciamento(){
                         <input type="number" onChange={e => setKmFinal(e.target.value)} placeholder={kmFinal}/>
                       } <span>Km</span></th>
                     <th>{frete.km_final - frete.km_inicial} <span>Km</span></th>
-
+                    <th>{
+                        editingFrete !== frete ?
+                        frete.motorista.placa :
+                        <select 
+                          value={placaEdit}
+                          onChange={e => setPlacaEdit(e.target.value)}
+                        >
+                          <option value="">Selecione uma placa</option>
+                          {motoristas.map(motorista => (
+                            <option key={motorista.id} value={motorista.placa}>
+                              {motorista.placa}
+                            </option>
+                          ))}
+                        </select>
+                      }</th>
+                    <th>{
+                        editingFrete !== frete ?
+                        frete.motorista.name :
+                        motoristas.find(m => m.placa === placaEdit)?.name || "Selecione uma placa"
+                      }</th>
                   </tr>
                   )) 
                 }

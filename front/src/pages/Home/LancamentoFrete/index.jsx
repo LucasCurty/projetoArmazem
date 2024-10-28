@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Section } from '../../../Components/Section';
 
@@ -16,6 +15,7 @@ export function LancamentoFrete(){
     const [freteSaidaMoto, setFreteSaidaMoto] = useState('')
 
     const [cidades, setCidades] = useState([])
+    const [uniqueAddresses, setUniqueAddresses] = useState([])
 
     const [mydate, setMyDate] = useState({
       day: (new Date().getDate()).toString().padStart(2,'0'),
@@ -46,20 +46,23 @@ export function LancamentoFrete(){
       if(!freteEmpresa || !freteSaidaMoto){
         return alert("nao existe frete empresa ou frete saida")
       }
-      await api.post('fretes',
+      await api.post('/fretes',
         { 
-          peso_total: (notasFrete.length * 10),
-          frete_empresa: freteEmpresa,
+          peso_total: notasFrete.reduce((acc, nota) => acc + Number(nota.peso.replace(',', '.')), 0),
+          frete_empresa: freteEmpresa,  
           frete_saida_motorista: freteSaidaMoto,
-          quantidade_entregas:notasFrete.length,
+          quantidade_entregas: uniqueAddresses.length,
+          km_inicial: 0,
+          km_final: 0,
           motorista: {
+            id: selectedMotorista.id,
             cpf_cnpj: selectedMotorista.cpf_cnpj,
             gerenciamento_risco: selectedMotorista.gerenciamento_risco ?? null,
             name: selectedMotorista.name,
             placa: selectedMotorista.placa,
             tipo_veiculo: selectedMotorista.tipo_veiculo ?? null
           },
-          notas: notasFrete  // teste enviando somente os Ids
+          notas: notasFrete
         })      
       .then(res => console.log(res.data))
       .catch(error => console.log(error.data))
@@ -96,7 +99,10 @@ export function LancamentoFrete(){
 
     useEffect(()=>{
       const getCidades = notasFrete.map(notas => (notas.cidade))
-      setCidades([... new Set(getCidades)])
+      const getEnderecos = notasFrete.map(notas => (notas.endereco_destinatario))
+      
+      setCidades([...new Set(getCidades)])
+      setUniqueAddresses([...new Set(getEnderecos)])
     },[notasFrete])
 
     const placaInput = inputMotorista ? inputMotorista.placa : ''
@@ -158,9 +164,12 @@ export function LancamentoFrete(){
             </Labels>
             <Labels>
               <label>CIDADES DESTINO</label>
-                {cidades.map(cidade => (<p>{cidade}</p>))}
+                <p>{cidades.map(cidade => (<p>{cidade}</p>))}</p>
             </Labels>
-              
+            <Labels>
+              <label>ENTREGAS</label>
+              <p>{uniqueAddresses.length}</p>
+            </Labels>
             <Labels>
                 <label>NOTAS</label>
                 <ul>
