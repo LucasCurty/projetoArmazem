@@ -14,7 +14,7 @@ import { Motoristas } from './Motoristas'
 
 
 export function Home(){
-    const [sectionActive, setSectionActive] = useState('Lançamento de Frete')
+    const [sectionActive, setSectionActive] = useState(['Lançamento de Frete'])
 
     function handleChangeSection(sectionSelected){
         setSectionActive(sectionSelected)
@@ -31,7 +31,7 @@ export function Home(){
                     <ButtonText  
                         onClick={(e)=>handleChangeSection(e.target.innerText)} 
                         title="Lançamento de Frete" 
-                        isActive={sectionActive === 'Lançamento de Frete'}
+                        isactive={sectionActive === 'Lançamento de Frete'}
                     />
                         
                 </Link>
@@ -39,21 +39,21 @@ export function Home(){
                     <ButtonText 
                         onClick={(e)=>handleChangeSection(e.target.innerText)} 
                         title="Gerenciamento"
-                        isActive={sectionActive === "Gerenciamento"}
+                        isactive={sectionActive === "Gerenciamento"}
                     />
                 </Link>
                 <Link>
                     <ButtonText 
                         onClick={(e)=>handleChangeSection(e.target.innerText)} 
                         title="Notas"
-                        isActive={sectionActive === "Notas"}
+                        isactive={sectionActive === "Notas"}
                     />
                 </Link>
                 <Link>
                     <ButtonText 
                         onClick={(e)=>handleChangeSection(e.target.innerText)} 
                         title="Motoristas"
-                        isActive={sectionActive === "Motoristas"}
+                        isactive={sectionActive === "Motoristas"}
                     />
                 </Link>
             </Menu>

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Section } from '../../../Components/Section';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import {LancarFrete, Labels, Frete, InsertValues} from './styles'
 
@@ -39,13 +41,19 @@ export function LancamentoFrete(){
 
     async function selectMotorista(event){
         setSelectedMotorista(event)
-        setInputMotorista(event)
+        setInputMotorista(null) // Limpa o input após selecionar
+        setApiMotorista([]) // Limpa as opções após selecionar
     }
 
     async function addFrete(){
       if(!freteEmpresa || !freteSaidaMoto){
-        return alert("nao existe frete empresa ou frete saida")
+        return toast.error("Por favor, preencha o frete empresa e frete saída")
       }
+
+      if(notasFrete.length === 0){
+        return toast.error("Não é possível lançar um frete sem notas fiscais")
+      }
+
       await api.post('/fretes',
         { 
           peso_total: notasFrete.reduce((acc, nota) => acc + Number(nota.peso.replace(',', '.')), 0),
@@ -64,8 +72,8 @@ export function LancamentoFrete(){
           },
           notas: notasFrete
         })      
-      .then(res => console.log(res.data))
-      .catch(error => console.log(error.data))
+      .then(res => toast.success("Frete lançado com sucesso!"))
+      .catch(error => toast.error("Erro ao lançar frete"))
         setInputMotorista(null)
         setFreteEmpresa('')
         setFreteSaidaMoto('')
@@ -75,14 +83,25 @@ export function LancamentoFrete(){
     
       useEffect(()=>{
         async function getMotorista(){
-            const response = await api.get(`/motorista/${inputMotorista}`)
-            setApiMotorista(response.data)
+            if (!inputMotorista) return; // Não busca se input estiver vazio
+            
+            try {
+                const response = await api.get(`/motorista/${inputMotorista}`);
+                setApiMotorista(response.data); // Atualiza o estado com os resultados
+                
+                if (response.data.length === 0) {
+                    toast.info("Nenhum motorista encontrado");
+                }
+            } catch (error) {
+                toast.error("Erro ao buscar motorista");
+                console.error(error);
+            }
         }
-        getMotorista()
         
-    },[inputMotorista])
+        getMotorista();
+      },[inputMotorista])
 
-    useEffect(()=>{
+      useEffect(()=>{
       
       async function getNotas(motorista, data) {
         const response = await api.get(`/notas/${motorista.id}`, {
@@ -109,6 +128,19 @@ export function LancamentoFrete(){
 
     return(
       <main>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        
         <Section title={"Lançamento de Frete"}>
             <Frete>
               {
@@ -121,22 +153,33 @@ export function LancamentoFrete(){
               <InsertValues >
                 <div className='infPlaca'>
                   <label>PLACA: </label>
-                  <input type="text" name='placa' value={placaInput} placeholder='Pesquisar Placa' onChange={e => setInputMotorista(e.target.value)}  />
+                  <input 
+                    type="text" 
+                    name='placa' 
+                    value={placaInput} 
+                    placeholder='Pesquisar Placa' 
+                    onChange={e => {
+                      setInputMotorista(e.target.value)
+                      setApiMotorista([]) // Limpa as opções ao começar nova busca
+                    }}  
+                  />
                   <div>
-                    { inputMotorista &&
+                    { inputMotorista && apiMotorista.length > 0 && // Só mostra se tiver resultados
                         apiMotorista.map((motorista,index) => (
-                          <option key={String(index)} onClick={()=> selectMotorista(motorista)}>{motorista.placa} </option>
+                          <option key={String(index)} onClick={()=> selectMotorista(motorista)}>
+                            {motorista.placa}
+                          </option>
                         ))
-                      }
+                    }
                   </div>
                 </div>
                   <div>
                     <label>FRETE EMPRESA</label>
-                    <input type="text" placeholder="Insira o valor" value={freteEmpresa} onChange={e => setFreteEmpresa(e.target.value)}/>
+                    <input type="number" placeholder="Insira o valor" value={freteEmpresa} onChange={e => setFreteEmpresa(e.target.value)}/>
                   </div>
                   <div>
                     <label>FRETE MOTORISTA</label>
-                    <input type="text" placeholder="Insira o valor" value={freteSaidaMoto} onChange={e => setFreteSaidaMoto(e.target.value)}/>
+                    <input type="number" placeholder="Insira o valor" value={freteSaidaMoto} onChange={e => setFreteSaidaMoto(e.target.value)}/>
                   </div>
                 </InsertValues>
             </Frete>

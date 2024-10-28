@@ -12,6 +12,10 @@ export const Container = styled.button`
     border-radius: 10px;
     font-weight: 500;
 
+    &:hover {
+        color: ${({theme}) => theme.COLORS.WHITE};
+    }
+
     &:disabled{
         opacity: 0.5;
     }

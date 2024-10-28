@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import {api} from '../../../services/api'
 
 import { Section } from '../../../Components/Section';
-import {Table} from './styles'
-import { FiEdit, FiCheckSquare, FiXSquare} from 'react-icons/fi'
+import { Modal } from '../../../Components/Modal';
+import { Button } from '../../../Components/Button';
+import { Table, ButtonContainer } from './styles'
+import { FiEdit, FiCheckSquare, FiTrash } from 'react-icons/fi'
 
 export function Gerenciamento(){
   const [fetchFretes, setFetchFretes] = useState([])
@@ -12,6 +16,8 @@ export function Gerenciamento(){
   const [hasSaveFrete, setHasSaveFrete] = useState(false)
   const [motoristas, setMotoristas] = useState([])
   const [placaEdit, setPlacaEdit] = useState("")
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [freteParaExcluir, setFreteParaExcluir] = useState(null);
 
   // status dos fretes
   const [freteEmpresa, setFreteEmpresa] = useState()
@@ -70,7 +76,27 @@ export function Gerenciamento(){
     setPlacaEdit("")
   }
 
-  
+  function handleDeleteFrete(frete) {
+    setFreteParaExcluir(frete);
+    setIsDeleteModalOpen(true);
+  }
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setFreteParaExcluir(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await api.delete(`/fretes/${freteParaExcluir.id}`);
+      setHasSaveFrete(!hasSaveFrete);
+      setEditingFrete([]);
+      toast.success("Frete excluído com sucesso!");
+      handleCloseDeleteModal();
+    } catch (error) {
+      toast.error("Erro ao excluir frete");
+    }
+  };
 
   useEffect(()=>{
       async function fetchFretes(){
@@ -87,7 +113,7 @@ export function Gerenciamento(){
           <Table>
             <thead>
               <tr>
-              {THead.map(head => <th key={String(head[0])}>{head}</th>)}
+              {THead.map((head, index) => <th key={`header-${index}`}>{head}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -101,10 +127,29 @@ export function Gerenciamento(){
                           :
                           <div>
                             <button className='enviar' onClick={ () => handleSendFreteEdited(frete)}><FiCheckSquare /></button>
-                            <button className='cancel' onClick={() => handleEditFrete([])}><FiXSquare /></button>
+                            <button className='excluir' onClick={() => handleDeleteFrete(frete)}><FiTrash /></button>
                           </div>
                         
                         }
+                        {isDeleteModalOpen && (
+                          <Modal
+                            isOpen={isDeleteModalOpen}
+                            title="Confirmar Exclusão" 
+                            onClose={handleCloseDeleteModal}
+                          >
+                            <p>Tem certeza que deseja excluir este frete?</p>
+                            <ButtonContainer>
+                              <Button
+                                title="Cancelar"
+                                onClick={handleCloseDeleteModal}
+                              />
+                              <Button
+                                title="Excluir"
+                                onClick={handleConfirmDelete}
+                              />
+                            </ButtonContainer>
+                          </Modal>
+                        )}
                         </td>
                     <th>{frete.id}</th>
                     <th>
@@ -158,7 +203,7 @@ export function Gerenciamento(){
                     <th>{frete.km_final - frete.km_inicial} <span>Km</span></th>
                     <th>{
                         editingFrete !== frete ?
-                        frete.motorista.placa :
+                        (frete.motorista?.placa || "Sem placa") :
                         <select 
                           value={placaEdit}
                           onChange={e => setPlacaEdit(e.target.value)}
@@ -173,7 +218,7 @@ export function Gerenciamento(){
                       }</th>
                     <th>{
                         editingFrete !== frete ?
-                        frete.motorista.name :
+                        (frete.motorista?.name || "Sem nome") :
                         motoristas.find(m => m.placa === placaEdit)?.name || "Selecione uma placa"
                       }</th>
                   </tr>
@@ -184,3 +229,4 @@ export function Gerenciamento(){
         </Section>
     );
 }
+

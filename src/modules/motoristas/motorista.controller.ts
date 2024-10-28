@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
 import { MotoristaService } from './motorista.service';
 import { motoristaDTO } from './motorista.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -23,7 +23,7 @@ export class MotoristaController {
     return this.motoristaService.findOneMotorista(placa);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateMotoristaDto: motoristaDTO) {
     return this.motoristaService.updateMotorsita(+id, updateMotoristaDto);
   }

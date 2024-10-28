@@ -1,21 +1,14 @@
-import { Section } from '../../../Components/Section';
-import { useState, useEffect } from 'react'
-import { 
-    Container,
-    TableContainer, 
-    Table, 
-    Modal, 
-    ModalContent, 
-    Form, 
-    ButtonContainer,
-    Select 
-} from './styles';
-import { Input } from '../../../Components/Input'
-import { Button } from '../../../Components/Button'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { Section } from '../../../Components/Section';
+import { useState, useEffect } from 'react'
+import { Container, TableContainer, Table, Form, ButtonContainer, Select, ActionButtons, EditButton, DeleteButton } from './styles';
+import { Input } from '../../../Components/Input'
+import { Button } from '../../../Components/Button'
+import { Modal } from '../../../Components/Modal'
 import { api } from '../../../services/api';  
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
+
 
 export function Motoristas() {
     const [motoristas, setMotoristas] = useState([]);
@@ -25,6 +18,11 @@ export function Motoristas() {
     const [placa, setPlaca] = useState("")
     const [tipo_veiculo, setTipo_veiculo] = useState("")
     const [errors, setErrors] = useState({});
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [motoristaEditando, setMotoristaEditando] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [motoristaParaExcluir, setMotoristaParaExcluir] = useState(null);
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     useEffect(() => { 
       async function getAllMotoristas(){
@@ -32,7 +30,7 @@ export function Motoristas() {
         setMotoristas(response.data)
       }
       getAllMotoristas()
-    }, [isModalOpen])
+    }, [isModalOpen, isEditModalOpen, isDeleteModalOpen])
 
     function handleOpenModal() {
         setIsModalOpen(true);
@@ -40,11 +38,12 @@ export function Motoristas() {
 
     function handleCloseModal() {
         setIsModalOpen(false);
-        // Limpar os campos do formulário
-        setNome("")
-        setCpf_cnpj("")
-        setPlaca("")
-        setTipo_veiculo("")
+        setFormSubmitted(false); // Reset do estado de submissão
+        setNome("");
+        setCpf_cnpj("");
+        setPlaca("");
+        setTipo_veiculo("");
+        setErrors({});
     }
 
     function validarFormulario() {
@@ -131,6 +130,7 @@ export function Motoristas() {
 
     async function handleCreateMotorista(e) {
         e.preventDefault();
+        setFormSubmitted(true); // Marca que houve tentativa de submissão
         
         if (!validarFormulario()) {
             return;
@@ -167,6 +167,74 @@ export function Motoristas() {
         return valor;
     }
 
+    function handleOpenEditModal(motorista) {
+        setMotoristaEditando(motorista);
+        setNome(motorista.name);
+        setCpf_cnpj(formatarCpfCnpj(motorista.cpf_cnpj));
+        setPlaca(motorista.placa);
+        setTipo_veiculo(motorista.tipo_veiculo);
+        setIsEditModalOpen(true);
+    }
+
+    function handleCloseEditModal() {
+        setIsEditModalOpen(false);
+        setMotoristaEditando(null);
+        // Limpar os campos
+        setNome("");
+        setCpf_cnpj("");
+        setPlaca("");
+        setTipo_veiculo("");
+    }
+
+    async function handleUpdateMotorista(e) {
+        e.preventDefault();
+        
+        if (!validarFormulario()) {
+            return;
+        }
+
+        const cpfCnpjLimpo = cpf_cnpj.replace(/\D/g, '');
+
+        const dadosMotorista = {
+            name: nome,
+            cpf_cnpj: cpfCnpjLimpo,
+            placa: placa.toUpperCase(),
+            tipo_veiculo: tipo_veiculo
+        };
+
+        try {
+            await api.put(`/motorista/${motoristaEditando.id}`, dadosMotorista);
+            toast.success("Motorista atualizado com sucesso!");
+            handleCloseEditModal();
+        } catch (error) {
+            const mensagemErro = error.response?.data?.message || "Erro ao atualizar motorista. Tente novamente.";
+            toast.error(mensagemErro);
+        }
+    }
+
+    function handleOpenDeleteModal(motorista) {
+        setMotoristaParaExcluir(motorista);
+        setIsDeleteModalOpen(true);
+    }
+
+    function handleCloseDeleteModal() {
+        setIsDeleteModalOpen(false);
+        setMotoristaParaExcluir(null);
+    }
+
+    async function handleDeleteMotorista() {
+        try {
+            await api.delete(`/motorista/${motoristaParaExcluir.id}`);
+            toast.success("Motorista excluído com sucesso!");
+            handleCloseDeleteModal();
+            // Remover esta linha que estava causando o erro
+            // await loadMotoristas(); 
+        } catch (error) {
+            const mensagemErro = error.response?.data?.message || "Erro ao excluir motorista. Tente novamente.";
+            toast.error(mensagemErro);
+        }
+    }
+
     return (
       <Section title={"Cadastro de Motoristas"}>
         <Container>
@@ -182,7 +250,10 @@ export function Motoristas() {
             pauseOnHover
             theme="light"
           />
-          <button onClick={handleOpenModal}>Novo Motorista</button>
+          <Button 
+            title="Novo Motorista" 
+            onClick={handleOpenModal}
+          />
           <TableContainer>
             <Table>
               <thead>
@@ -192,6 +263,7 @@ export function Motoristas() {
                   <th>PLACA</th>
                   <th>TIPO VEÍCULO</th>
                   <th>GERÊNCIA DE RISCO</th>
+                  <th>AÇÕES</th>
                 </tr>
               </thead>
               <tbody>
@@ -202,6 +274,16 @@ export function Motoristas() {
                     <td>{motorista.placa}</td>
                     <td>{motorista.tipo_veiculo}</td>
                     <td>{motorista.gerenciamento_risco}</td>
+                    <td>
+                      <ActionButtons>
+                        <EditButton onClick={() => handleOpenEditModal(motorista)}>
+                          <FiEdit />
+                        </EditButton>
+                        <DeleteButton onClick={() => handleOpenDeleteModal(motorista)}>
+                          <FiTrash2 />
+                        </DeleteButton>
+                      </ActionButtons>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -209,53 +291,140 @@ export function Motoristas() {
           </TableContainer>
 
           {isModalOpen && (
-            <Modal>
-              <ModalContent>
-                <h2>Cadastro de Motorista</h2>
-                <Form onSubmit={handleCreateMotorista}>
-                  <Input 
-                    placeholder="Nome completo"
-                    type="text"
-                    value={nome}
-                    onChange={handleNomeChange}
+            <Modal 
+              isOpen={isModalOpen} // Adicionar esta prop
+              title="Cadastro de Motorista"
+              onClose={handleCloseModal}
+            >
+              <Form onSubmit={handleCreateMotorista}>
+                <Input 
+                  placeholder="Nome completo"
+                  type="text"
+                  value={nome}
+                  onChange={handleNomeChange}
+                />
+                {formSubmitted && errors.nome && <span className="error">{errors.nome}</span>}
+
+                <Input 
+                  placeholder="CPF/CNPJ"
+                  type="text"
+                  value={cpf_cnpj}
+                  onChange={handleCpfCnpjChange}
+                />
+                {formSubmitted && errors.cpf_cnpj && <span className="error">{errors.cpf_cnpj}</span>}
+
+                <Input 
+                  placeholder="Placa"
+                  type="text"
+                  value={placa}
+                  onChange={handlePlacaChange}
+                />
+                {formSubmitted && errors.placa && <span className="error">{errors.placa}</span>}
+
+                <Select 
+                  value={tipo_veiculo}
+                  onChange={handleTipoVeiculoChange}
+                >
+                  <option value="">SELECIONE O TIPO DE VEÍCULO</option>
+                  <option value="van refrigerada">VAN REFRIGERADA</option>
+                  <option value="van seca">VAN SECA</option>
+                  <option value="3/4 refrigerada">3/4 REFRIGERADA</option>
+                  <option value="3/4 seca">3/4 SECA</option>
+                </Select>
+                {formSubmitted && errors.tipo_veiculo && <span className="error">{errors.tipo_veiculo}</span>}
+
+                <ButtonContainer>
+                  <Button 
+                    title="Cancelar" 
+                    type="button" 
+                    onClick={handleCloseModal}
                   />
-                  {errors.nome && <span className="error">{errors.nome}</span>}
-
-                  <Input 
-                    placeholder="CPF/CNPJ"
-                    type="text"
-                    value={cpf_cnpj}
-                    onChange={handleCpfCnpjChange}
+                  <Button 
+                    title="Cadastrar" 
+                    type="submit"
                   />
-                  {errors.cpf_cnpj && <span className="error">{errors.cpf_cnpj}</span>}
+                </ButtonContainer>
+              </Form>
+            </Modal>
+          )}
 
-                  <Input 
-                    placeholder="Placa"
-                    type="text"
-                    value={placa}
-                    onChange={handlePlacaChange}
+          {isEditModalOpen && (
+            <Modal 
+              isOpen={isEditModalOpen} // Correção aqui - estava usando isOpen indefinido
+              onClose={handleCloseEditModal}
+              title="Editar Motorista"
+            >
+              <Form onSubmit={handleUpdateMotorista}>
+                <Input 
+                  placeholder="Nome completo"
+                  type="text"
+                  value={nome}
+                  onChange={handleNomeChange}
+                />
+                {errors.nome && <span className="error">{errors.nome}</span>}
+
+                <Input 
+                  placeholder="CPF/CNPJ"
+                  type="text"
+                  value={cpf_cnpj}
+                  onChange={handleCpfCnpjChange}
+                />
+                {errors.cpf_cnpj && <span className="error">{errors.cpf_cnpj}</span>}
+
+                <Input 
+                  placeholder="Placa"
+                  type="text"
+                  value={placa}
+                  onChange={handlePlacaChange}
+                />
+                {errors.placa && <span className="error">{errors.placa}</span>}
+
+                <Select 
+                  value={tipo_veiculo}
+                  onChange={handleTipoVeiculoChange}
+                >
+                  <option value="">SELECIONE O TIPO DE VEÍCULO</option>
+                  <option value="van refrigerada">VAN REFRIGERADA</option>
+                  <option value="van seca">VAN SECA</option>
+                  <option value="3/4 refrigerada">3/4 REFRIGERADA</option>
+                  <option value="3/4 seca">3/4 SECA</option>
+                </Select>
+                {errors.tipo_veiculo && <span className="error">{errors.tipo_veiculo}</span>}
+
+                <ButtonContainer>
+                  <Button 
+                    title="Cancelar" 
+                    type="button" 
+                    onClick={handleCloseEditModal}
                   />
-                  {errors.placa && <span className="error">{errors.placa}</span>}
+                  <Button 
+                    title="Salvar" 
+                    type="submit"
+                  />
+                </ButtonContainer>
+              </Form>
+            </Modal>
+          )}
 
-                  <Select 
-                    value={tipo_veiculo}
-                    onChange={handleTipoVeiculoChange}
-                  >
-                    <option value="">SELECIONE O TIPO DE VEÍCULO</option>
-                    <option value="van refrigerada">VAN REFRIGERADA</option>
-                    <option value="van seca">VAN SECA</option>
-                    <option value="3/4 refrigerada">3/4 REFRIGERADA</option>
-                    <option value="3/4 seca">3/4 SECA</option>
-                  </Select>
-                  {errors.tipo_veiculo && <span className="error">{errors.tipo_veiculo}</span>}
-                  {errors.api && <span className="error">{errors.api}</span>}
-
-                  <ButtonContainer>
-                    <Button title="Cancelar" type="button" onClick={handleCloseModal} />
-                    <Button title="Cadastrar" type="submit" />
-                  </ButtonContainer>
-                </Form>
-              </ModalContent>
+          {isDeleteModalOpen && (
+            <Modal 
+              isOpen={isDeleteModalOpen} // Adicionar esta prop
+              title="Confirmar Exclusão"
+              onClose={handleCloseDeleteModal}
+            >
+              <p>Tem certeza que deseja excluir o motorista {motoristaParaExcluir?.name}?</p>
+              <ButtonContainer>
+                <Button 
+                  title="Cancelar" 
+                  type="button" 
+                  onClick={handleCloseDeleteModal} 
+                />
+                <Button 
+                  title="Excluir" 
+                  type="button" 
+                  onClick={handleDeleteMotorista}
+                />
+              </ButtonContainer>
             </Modal>
           )}
         </Container>

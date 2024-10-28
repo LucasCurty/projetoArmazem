@@ -95,3 +95,33 @@ export const Select = styled.select`
     font-size: 16px;
   }
 `;
+
+export const ActionButtons = styled.div`
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+`;
+
+export const EditButton = styled.button`
+    background: none;
+    border: none;
+    color: var(--blue-500);
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.7;
+    }
+`;
+
+export const DeleteButton = styled.button`
+    background: none;
+    border: none;
+    color: var(--red-500);
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.7;
+    }
+`;
