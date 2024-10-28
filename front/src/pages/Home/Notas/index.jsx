@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
-import { FiEdit, FiCheckSquare, FiXSquare} from 'react-icons/fi'
+import { FiEdit, FiCheckSquare, FiTrash2} from 'react-icons/fi'
 
 import { api } from '../../../services/api';
 import { Section } from '../../../Components/Section';
 import { THead, TBody, Table, SearchContainer, SearchInput, SearchSelect } from './styles';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export function Notas(){
   // state de consumir api notas
   const [fetchNotas, setfetchNotas] = useState([])
+  const [allNotas, setAllNotas] = useState([])
   const [reFetchNotas, setReFethNotas] = useState(false)
   const [fetchMotoristas, setFetchMotoristas] = useState([])
 
@@ -25,11 +29,6 @@ export function Notas(){
   //starte de observação
   const [observacoesNF, setObservacoes] = useState('')
 
-  //state message
-  const [msg, setMsg] = useState('')
-  const [msgClass, setMsgClass] = useState('')
-
-  const [searchTerm, setSearchTerm] = useState('');
   const [searchNota, setSearchNota] = useState('');
   const [searchCliente, setSearchCliente] = useState('');
   const [clientes, setClientes] = useState([]);
@@ -41,7 +40,6 @@ export function Notas(){
     setPlaca(searchMoto[0])
 
   }
-
   function handleChangeInfomationOfNote(nf){ // funcao para pegar a nota e aditar
     setChangeNota(nf)
   } 
@@ -58,19 +56,10 @@ export function Notas(){
         observacoes: observacoesNF ? observacoesNF : nf.observacoes,
     })
     .then(
-      setMsg(`A nota ${nf.numero_nota} foi alterada com sucesso!`),
-      setMsgClass('sucess'),
-      setTimeout(()=>{
-        setMsg('')
-      },[2500])
-
+      toast.success(`A nota ${nf.numero_nota} foi alterada com sucesso!`)
     )
     .catch(err => {
-      setMsg(`Não foi possivel alterar a nota ${nf.numero_nota}, erro: ${err}`)
-      setMsgClass('denid'),
-      setTimeout(()=>{
-        setMsg('')
-      },[2500])
+      toast.error(`Não foi possivel alterar a nota ${nf.numero_nota}, erro: ${err}`)
     })
     setReFethNotas(!reFetchNotas)
     setValueChange('')
@@ -86,29 +75,55 @@ export function Notas(){
   
 
   // Função para buscar clientes únicos
-  async function fetchClientes() {
-    const response = await api.get('/notas');
-    const uniqueClientes = [...new Set(response.data.map(nota => nota.client))];
+  function fetchClientes() {
+    const uniqueClientes = [...new Set(allNotas.map(nota => nota.client))];
     setClientes(uniqueClientes);
   }
   
-  useEffect(() => {
-    async function fetchNotes(){      
-      const response = await api.get(`/notas?numero_nota=${searchNota}&client=${searchCliente}`);
-      setfetchNotas(response.data);
+  function filterNotas() {
+    let filteredNotas = [...allNotas];
+    
+    if (searchNota) {
+      filteredNotas = filteredNotas.filter(nota => 
+        nota.numero_nota.toString().toLowerCase().includes(searchNota.toLowerCase())
+      );
     }
-    fetchNotes();
-  }, [searchNota, searchCliente]);
+    
+    if (searchCliente) {
+      filteredNotas = filteredNotas.filter(nota => 
+        nota.client.toLowerCase().includes(searchCliente.toLowerCase())
+      );
+    }
+    
+    setfetchNotas(filteredNotas);
+  }
 
-  // Effect para carregar clientes ao montar o componente
+  // Modificar o useEffect para carregar todas as notas uma única vez
+  useEffect(() => {
+    async function loadNotas() {
+        const response = await api.get('/notas');
+        setAllNotas(response.data);
+        setfetchNotas(response.data);
+    }
+
+    async function loadMotoristas() {
+      const response = await api.get('/motorista');
+      setFetchMotoristas(response.data);
+    }
+
+    loadNotas();
+    loadMotoristas();
+  }, [reFetchNotas]);
+
+  // Modificar o useEffect dos filtros
+  useEffect(() => {
+    filterNotas();
+  }, [searchNota, searchCliente, allNotas]);
+
+  // Adicione o useEffect para carregar os clientes quando as notas forem carregadas
   useEffect(() => {
     fetchClientes();
-  }, []);
-
-  // Effect para buscar notas quando os filtros mudarem
-  useEffect(() => {
- 
-  }, [searchNota, searchCliente]);
+  }, [allNotas]);
 
   return(
     <Section title="Minhas Notas">
@@ -134,7 +149,6 @@ export function Notas(){
       </SearchContainer>
 
       <Table>
-        { msg &&  <span className={msgClass}>{msg}</span>}
         <THead>
             <tr>
             {
@@ -154,7 +168,7 @@ export function Notas(){
                     :
                     <div>
                       <button className='enviar' onClick={()=> changeInfoNote(nota)}><FiCheckSquare /></button>
-                      <button className='cancel' onClick={() => handleChangeInfomationOfNote()}><FiXSquare /></button>
+                      <button className='cancel' onClick={() => handleChangeInfomationOfNote()}><FiTrash2 /></button>
                     </div>
                   }
                   </td>

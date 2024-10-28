@@ -38,26 +38,23 @@ export const TBody = styled.tbody`
     .buttns{
         
         > button{
+          background-color: transparent;
             font-size: 1rem;
             padding: 1px 3px;
             border: none;
             border-radius: 3px;
-            color: ${({theme})=> theme.COLORS.BACKGROUND_800};
+            color: ${({theme})=> theme.COLORS.WHITE};
         }
-        
-        > button:hover{
-        background-color: ${({theme})=> theme.COLORS.ORANGE};
-        color: white;
-        
-        }
-        >div .enviar:hover{
-            background-color: ${({theme})=> theme.COLORS.ORANGE};
-            color: white;
-        }
-        >div .cancel:hover{
-            background-color: ${({theme})=> theme.COLORS.RED};
-            color: white;
-
+        > div button{
+          background-color: transparent;
+          border: none;
+          color: ${({theme})=> theme.COLORS.WHITE};
+          font-size: 1rem;
+          padding: 1px 3px;
+          border-radius: 3px;
+          &:hover{
+            color: ${({theme})=> theme.COLORS.ORANGE};
+          }
         }
     }
    
@@ -65,6 +62,7 @@ export const TBody = styled.tbody`
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
 
    }
+   
    > tr td div {
         display: flex;
         justify-content: space-between;
@@ -82,7 +80,11 @@ export const TBody = styled.tbody`
 
         
     }
-
+    >tr td input {
+        background-color: ${({theme})=> theme.COLORS.BACKGROUND_800};
+        color: ${({theme})=> theme.COLORS.WHITE};
+        border: none;
+    }
 `;
 
 export const SearchContainer = styled.div`
@@ -97,6 +99,8 @@ export const SearchInput = styled.input`
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 14px;
+  background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+  color: white;
 
   &::placeholder {
     color: #999;
@@ -114,6 +118,8 @@ export const SearchSelect = styled.select`
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 14px;
+  background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+  color: white;
 
   &:focus {
     outline: none;

@@ -161,7 +161,8 @@ export function LancamentoFrete(){
                     onChange={e => {
                       setInputMotorista(e.target.value)
                       setApiMotorista([]) // Limpa as opções ao começar nova busca
-                    }}  
+                    }}
+                    autoComplete="off"
                   />
                   <div>
                     { inputMotorista && apiMotorista.length > 0 && // Só mostra se tiver resultados

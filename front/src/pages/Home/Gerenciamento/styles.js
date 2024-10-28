@@ -6,52 +6,94 @@ export const Table = styled.table`
     letter-spacing: 1px;
     width: 100%;
     
-    > thead {
+    thead {
         background-color: ${({theme})=> theme.COLORS.ORANGE};
     }
     
-    th,td {
+    th, td {
         border: 1px solid rgb(160 160 160);
-        padding: 8px 16px;
+        padding: 6px 12px;
         white-space: nowrap;
     }
-     
-    > th:hover {
+    th input{
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+        border: 1px solid ${({theme})=> theme.COLORS.ORANGE};
+        color: ${({theme})=> theme.COLORS.WHITE};
+
+        &::placeholder {
+            color: ${({theme})=> theme.COLORS.WHITE};
+            font-size: 14px;
+            opacity: 0.7;
+            padding-left: 10px;
+        }
     }
 
-    span:hover {
-        cursor: pointer;
+    th select {
+        background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+        color: ${({theme})=> theme.COLORS.WHITE};
+        padding-left: 10px;
     }
 
-   > .buttns {
-        display: flex;
-        gap: 12px;
-        justify-content: flex-start;
-        align-items: center;
-        min-width: 80px;
-        
-       > button {
-            background: none;
-            border: none;
-            padding: 0;
-            line-height: 0;
+    tbody {
+        tr:hover {
+            background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+        }
+
+        span:hover {
             cursor: pointer;
+        }
+
+        .buttns {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-start;
+            align-items: center;
+            min-width: 80px;
+            >div {
+                > button {
+                background: transparent;
+                border: none;
+                padding: 0;
+                line-height: 0;
+                cursor: pointer;
             
-            > svg {
-                width: 20px;
-                height: 20px;
-                color: ${({theme}) => theme.COLORS.WHITE};
-                
-                &:hover {
-                    opacity: 0.7;
+               > svg {
+                    width: 20px;
+                    height: 20px;
+                    color: ${({theme}) => theme.COLORS.WHITE};
+                    
+                    
+                    &:hover {
+                        opacity: 0.7;
+                    }
+                }
+            }
+            }
+           > button {
+                background: transparent;
+                border: none;
+                padding: 0;
+                line-height: 0;
+                cursor: pointer;
+            
+               > svg {
+                    width: 20px;
+                    height: 20px;
+                    color: ${({theme}) => theme.COLORS.WHITE};
+                    
+                    
+                    &:hover {
+                        opacity: 0.7;
+                    }
                 }
             }
         }
     }
 `;
+
 export const ButtonContainer = styled.div`
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    
 `;

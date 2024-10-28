@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {api} from '../../../services/api'
@@ -64,8 +64,12 @@ export function Gerenciamento(){
         motorista: motoristaSelecionado // adicionar ID do motorista
       }
     )
-    .then(res => console.log(res))
-    .catch(error => console.log(error))
+    .then(() => {
+      toast.success("Frete editado com sucesso!");
+    })
+    .catch(() => {
+      toast.error("Erro ao editar frete");
+    })
 
     setEditingFrete([])
     setFreteEmpresa(0)
@@ -109,7 +113,18 @@ export function Gerenciamento(){
 
     return(
         <Section title="Gerenciamento">
-          
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
           <Table>
             <thead>
               <tr>
@@ -123,11 +138,17 @@ export function Gerenciamento(){
                   <tr key={String(frete.id)}>
                     <td className='buttns'>
                         { editingFrete !== frete ?
-                          <button onClick={ () => handleEditFrete(frete)}><FiEdit/></button>
+                          <button onClick={ () => handleEditFrete(frete)}>
+                            <FiEdit/>
+                          </button>
                           :
                           <div>
-                            <button className='enviar' onClick={ () => handleSendFreteEdited(frete)}><FiCheckSquare /></button>
-                            <button className='excluir' onClick={() => handleDeleteFrete(frete)}><FiTrash /></button>
+                            <button className='enviar' onClick={ () => handleSendFreteEdited(frete)}>
+                              <FiCheckSquare />
+                            </button>
+                          <button className='excluir' onClick={() =>      handleDeleteFrete(frete)}>
+                              <FiTrash />
+                            </button>
                           </div>
                         
                         }
@@ -141,10 +162,12 @@ export function Gerenciamento(){
                             <ButtonContainer>
                               <Button
                                 title="Cancelar"
+                                type="button"
                                 onClick={handleCloseDeleteModal}
                               />
                               <Button
                                 title="Excluir"
+                                type="button"
                                 onClick={handleConfirmDelete}
                               />
                             </ButtonContainer>

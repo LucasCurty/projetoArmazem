@@ -18,16 +18,24 @@ export const TableContainer = styled.div`
 export const Table = styled.table`
     width: 100%;
     border-collapse: collapse;
+    background-color: ${({theme})=> theme.COLORS.BACKGROUND_800};
 
     th, td {
         padding: 12px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
+        border: 1px solid ${({theme})=> theme.COLORS.BACKGROUND_700};
     }
 
     th {
-      background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
-      color: ${({theme})=> theme.COLORS.ORANGE};
+        background-color: ${({theme})=> theme.COLORS.ORANGE};
+        color: ${({theme})=> theme.COLORS.WHITE};
+        font-weight: bold;
+    }
+
+  
+
+    tr:hover {
+        background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
     }
 `;
 
@@ -61,12 +69,6 @@ export const Form = styled.form`
     flex-direction: column;
     gap: 10px;
 
-    .error {
-        color: #ff0000;
-        font-size: 12px;
-        margin-top: -8px;
-        margin-bottom: 8px;
-    }
 `;
 
 export const ButtonContainer = styled.div`

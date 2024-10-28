@@ -20,6 +20,10 @@ export const Frete = styled.main`
         }
         input[type=date]{
           margin-top: 10px;
+          background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+          color: white;
+          border: none;
+          padding: 5px 10px;
         }
     }
 
@@ -74,6 +78,18 @@ export const InsertValues = styled.form`
           flex-direction: column;
         }
       }
+
+    input {
+      background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+      border: none;
+      color: white;
+      padding: 8px;
+      border-radius: 4px;
+      
+      &::placeholder {
+        color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+      }
+    }
 `;
 
 export const LancarFrete = styled.div`

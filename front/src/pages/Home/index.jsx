@@ -14,7 +14,7 @@ import { Motoristas } from './Motoristas'
 
 
 export function Home(){
-    const [sectionActive, setSectionActive] = useState(['Lançamento de Frete'])
+    const [sectionActive, setSectionActive] = useState('Lançamento de Frete')
 
     function handleChangeSection(sectionSelected){
         setSectionActive(sectionSelected)
