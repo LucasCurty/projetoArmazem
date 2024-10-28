@@ -32,6 +32,11 @@ export class NotasController {
   async update(@Param("id") id:number, @Body() data: NotasDTO){
     return this.notasService.updateNota(id,data);
   }
+  
+  @Get()
+  async findByFilters(@Query('numero_nota') numero_nota?: string, @Query('client') client?: string) {
+    return this.notasService.findByFilters(numero_nota, client);
+  }
 
   @Delete(":id")
   async delete(@Param("id") id:number){

@@ -96,4 +96,25 @@ export class NotasService {
             }
         })
     }
+
+    async findByFilters(numero_nota?: string, client?: string) {
+        const where = {};
+        
+        if (numero_nota) {
+            where['numero_nota'] = numero_nota;
+        }
+        
+        if (client) {
+            where['client'] = client;
+        }
+
+        const notas = await this.prisma.nota.findMany({
+            where,
+            include: {
+                motorista: true
+            }
+        });
+
+        return notas;
+    }
 }

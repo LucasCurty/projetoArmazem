@@ -19,7 +19,7 @@ import { api } from '../../../services/api';
 
 export function Motoristas() {
     const [motoristas, setMotoristas] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [nome, setNome] = useState("")
     const [cpf_cnpj, setCpf_cnpj] = useState("")
     const [placa, setPlaca] = useState("")

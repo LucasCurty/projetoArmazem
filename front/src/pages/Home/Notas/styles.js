@@ -84,3 +84,39 @@ export const TBody = styled.tbody`
     }
 
 `;
+
+export const SearchContainer = styled.div`
+  margin-bottom: 20px;
+  display: flex;
+  gap: 16px;
+`;
+
+export const SearchInput = styled.input`
+  padding: 8px;
+  width: 200px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+
+  &::placeholder {
+    color: #999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #666;
+  }
+`;
+
+export const SearchSelect = styled.select`
+  padding: 8px;
+  width: 300px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+
+  &:focus {
+    outline: none;
+    border-color: #666;
+  }
+`;
