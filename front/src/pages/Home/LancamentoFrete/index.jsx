@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {LancarFrete, Labels, Frete, InsertValues} from './styles'
-
+import { Button } from '../../../Components/Button';
 import { api } from '../../../services/api'
 
 export function LancamentoFrete(){
@@ -237,9 +237,20 @@ export function LancamentoFrete(){
                   }
                 </ul>
             </Labels>
+            <Labels>
+              <label>CLIENTE</label>
+                {
+                  [...new Set(notasFrete.map(nota => nota.client))].map(client => (
+                    <p>{client}</p>
+                  ))
+                }
+            </Labels>
           </LancarFrete>
         </Section>
-        <button onClick={addFrete}>Enviar Frete</button>
+        <Button 
+          onClick={addFrete} 
+          title="Enviar Frete"
+        />
       </main>
     );
 }

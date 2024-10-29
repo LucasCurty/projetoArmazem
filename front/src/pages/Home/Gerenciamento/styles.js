@@ -97,3 +97,56 @@ export const ButtonContainer = styled.div`
     margin-top: 20px;
     
 `;
+
+export const TagContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+export const TagButton = styled.button`
+  background: ${({theme, selected }) => selected ? theme.COLORS.ORANGE : theme.COLORS.BACKGROUND_900};
+  color: ${({theme, selected }) => selected ? theme.COLORS.WHITE : theme.COLORS.WHITE};
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin: 4px;
+  transition: all 0.2s;
+  font-size: 14px;
+  
+  &:hover {
+    background: ${({theme, selected }) => selected ? theme.COLORS.BACKGROUND_700 : theme.COLORS.BACKGROUND_900};
+    transform: translateY(-2px);
+  }
+`;
+
+export const DateInputContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+
+  label {
+    color: ${({ theme }) => theme.COLORS.WHITE};
+    font-size: 14px;
+    margin-right: 8px;
+  }
+
+  input[type="date"] {
+    padding: 8px;
+    border: 1px solid ${({ theme }) => theme.COLORS.GRAY_300};
+    border-radius: 5px;
+    background-color: ${({ theme }) => theme.COLORS.BACKGROUND_800};
+    color: ${({ theme }) => theme.COLORS.WHITE};
+    font-size: 14px;
+    
+    &:focus {
+      outline: none;
+      border-color: ${({ theme }) => theme.COLORS.ORANGE};
+    }
+
+    &::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+    }
+  }
+`;

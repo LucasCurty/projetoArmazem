@@ -43,7 +43,8 @@ export class FretesService {
     async findAllFretes(){
         return await this.prisma.frete.findMany({
             include:{
-                motorista: true
+                motorista: true,
+                notas: true
             }
         });
     }

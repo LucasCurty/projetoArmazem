@@ -5,7 +5,7 @@ import { api } from '../../../services/api';
 import { Section } from '../../../Components/Section';
 import { THead, TBody, Table, SearchContainer, SearchInput, SearchSelect } from './styles';
 
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -68,7 +68,6 @@ export function Notas(){
     setPlaca({})
     setChangeNota([])
     setFetchMotoristas([])
-    
   }
 
   // Função para buscar notas com filtro
@@ -127,6 +126,17 @@ export function Notas(){
 
   return(
     <Section title="Minhas Notas">
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover  
+      />
       <SearchContainer>
         <SearchSelect
           value={searchCliente}

@@ -7,8 +7,9 @@ import {api} from '../../../services/api'
 import { Section } from '../../../Components/Section';
 import { Modal } from '../../../Components/Modal';
 import { Button } from '../../../Components/Button';
-import { Table, ButtonContainer } from './styles'
+import { Table, ButtonContainer, TagContainer, TagButton } from './styles'
 import { FiEdit, FiCheckSquare, FiTrash } from 'react-icons/fi'
+import { DateInputContainer } from './styles'
 
 export function Gerenciamento(){
   const [fetchFretes, setFetchFretes] = useState([])
@@ -27,8 +28,29 @@ export function Gerenciamento(){
   const [pesoTotal, setPesoTotal] = useState(0)
   const [quantidadeEntregas, setQuantidadeEntregas] = useState(0)
 
+  const [clientes, setClientes] = useState([]);
+  const [clienteSelecionado, setClienteSelecionado] = useState('todos');
 
-  const THead = ["","N° FRETE", "DATA", "FRETE EMPRESA", "FRETE SAIDA MOTO", "MARGEM", "PESO", "QUA. ENTREGAS", "KM INICIAL", "KM FINAL", "KM EXTRA","PLACA", "MOTORISTA" ]
+  // Adicionar novo estado para tags
+  const [tagsSelecionadas, setTagsSelecionadas] = useState([]);
+  
+  // Lista de clientes únicos dos fretes para tags rápidas
+  const clientesFixos = [...new Set(fetchFretes.flatMap(frete => 
+    frete.notas.map(nota => nota.client)
+  ))];
+
+  // Função para alternar tag selecionada
+  const toggleTag = (cliente) => {
+    if (tagsSelecionadas.includes(cliente)) {
+      setTagsSelecionadas([]);
+      setClienteSelecionado('todos');
+    } else {
+      setTagsSelecionadas([cliente]);
+      setClienteSelecionado(cliente);
+    }
+  };
+
+  const THead = ["","N° FRETE", "DATA","CLIENTE", "FRETE EMPRESA", "FRETE SAIDA MOTO", "MARGEM", "PESO", "QUA. ENTREGAS", "KM INICIAL", "KM FINAL", "KM EXTRA","PLACA", "MOTORISTA" ]
    
   // Adicionar função para buscar motoristas
   useEffect(() => {
@@ -38,6 +60,36 @@ export function Gerenciamento(){
     }
     fetchMotoristas()
   }, [])
+
+  // Modificar o useEffect para buscar clientes das notas
+  useEffect(() => {
+    const clientesUnicos = [...new Set(fetchFretes.flatMap(frete => 
+      frete.notas.map(nota => nota.cliente || 'Sem cliente')
+    ))];
+    setClientes(clientesUnicos);
+  }, [fetchFretes]);
+
+  // Adicionar estados para controle de datas
+  const [dataInicial, setDataInicial] = useState('');
+  const [dataFinal, setDataFinal] = useState('');
+
+  // Modificar a lógica de filtragem para incluir datas corretamente
+  const fretesFiltrados = fetchFretes
+    .filter(frete => {
+      // Filtro por cliente
+      const passouFiltroCliente = clienteSelecionado === 'todos' || 
+        frete.notas.some(nota => nota.client === clienteSelecionado);
+
+      // Filtro por data
+      const dataFrete = new Date(frete.data_frete);
+      const dataInicialObj = dataInicial ? new Date(dataInicial) : null;
+      const dataFinalObj = dataFinal ? new Date(dataFinal) : null;
+
+      const passouFiltroDatas = (!dataInicial || !dataFinal) || 
+        (dataFrete >= dataInicialObj && dataFrete <= new Date(dataFinal + 'T23:59:59'));
+
+      return passouFiltroCliente && passouFiltroDatas;
+    });
 
   function handleEditFrete(frete){
     setEditingFrete(frete)
@@ -113,6 +165,40 @@ export function Gerenciamento(){
 
     return(
         <Section title="Gerenciamento">
+          <DateInputContainer>
+            <div>
+              <label htmlFor="dataInicial">Data Inicial: </label>
+              <input
+                type="date"
+                id="dataInicial"
+                value={dataInicial}
+                onChange={(e) => setDataInicial(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="dataFinal">Data Final: </label>
+              <input
+                type="date"
+                id="dataFinal"
+                value={dataFinal}
+                onChange={(e) => setDataFinal(e.target.value)}
+              />
+            </div>
+          </DateInputContainer>
+
+          <TagContainer>
+            {clientesFixos.map(cliente => (
+              <TagButton
+                key={String(cliente)}
+                onClick={() => toggleTag(cliente)}
+                selected={tagsSelecionadas.includes(cliente)}
+              >
+                {cliente}
+              </TagButton>
+            ))}
+          </TagContainer>
+
+          
           <ToastContainer
             position="top-right"
             autoClose={5000}
@@ -133,8 +219,8 @@ export function Gerenciamento(){
             </thead>
             <tbody>
             {
-              fetchFretes &&
-                fetchFretes.map(frete =>(
+              fretesFiltrados &&
+                fretesFiltrados.map(frete =>(
                   <tr key={String(frete.id)}>
                     <td className='buttns'>
                         { editingFrete !== frete ?
@@ -152,9 +238,10 @@ export function Gerenciamento(){
                           </div>
                         
                         }
-                        {isDeleteModalOpen && (
-                          <Modal
-                            isOpen={isDeleteModalOpen}
+                        {
+                          isDeleteModalOpen && (
+                            <Modal
+                              isOpen={isDeleteModalOpen}
                             title="Confirmar Exclusão" 
                             onClose={handleCloseDeleteModal}
                           >
@@ -182,6 +269,9 @@ export function Gerenciamento(){
                       `}
                     </th>
                     <th>
+                      {[...new Set(frete.notas.map(nota => nota.client))]}
+                    </th>
+                    <th>
                       {
                           editingFrete !== frete ?
                           frete.frete_empresa
@@ -190,13 +280,14 @@ export function Gerenciamento(){
                         }  
                         <span>R$</span>
                     </th>
+                    
                     <th>{
                           editingFrete !== frete ?
                           frete.frete_saida_motorista
                           :
                           <input type="number" onChange={ e => setFreteSaidaMotorista(e.target.value)} placeholder={freteSaidaMotorista}/>
                         }
-                        <span>R$</span>
+                    <span>R$</span>
                     </th>
                     <th>
                       <span title={`Margem: R$${(frete.frete_empresa - frete.frete_saida_motorista).toFixed(2)}
