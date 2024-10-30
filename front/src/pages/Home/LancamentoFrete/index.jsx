@@ -28,16 +28,19 @@ export function LancamentoFrete(){
     })
 
     //lancar data do frete 
-    function handleChangeDate(e){
+   async function handleChangeDate(e){
       const data = String(e).split('-')
+      const novaData = await new Date(e).toISOString()
+      
       setMyDate({
-        fullDate: e,
+        fullDate: novaData,
         day: data[2],
         months: data[1],
         years: data[0],
       })
+      
     }
-
+    
 
     async function selectMotorista(event){
         setSelectedMotorista(event)
@@ -54,7 +57,7 @@ export function LancamentoFrete(){
         return toast.error("Não é possível lançar um frete sem notas fiscais")
       }
 
-      await api.post('/fretes',
+       await api.post('/fretes',
         { 
           peso_total: notasFrete.reduce((acc, nota) => acc + Number(nota.peso.replace(',', '.')), 0),
           frete_empresa: freteEmpresa,  
@@ -62,6 +65,7 @@ export function LancamentoFrete(){
           quantidade_entregas: uniqueAddresses.length,
           km_inicial: 0,
           km_final: 0,
+          data_frete: mydate.fullDate,
           motorista: {
             id: selectedMotorista.id,
             cpf_cnpj: selectedMotorista.cpf_cnpj,
@@ -213,6 +217,12 @@ export function LancamentoFrete(){
             <Labels>
               <label>ENTREGAS</label>
               <p>{uniqueAddresses.length}</p>
+            </Labels>
+            <Labels>
+              <label>PESO TOTAL</label>
+              <p>
+                {notasFrete.reduce((acc, nota) => acc + Number(nota.peso.replace(',', '.')), 0).toFixed(2)} Kg
+              </p>
             </Labels>
             <Labels>
                 <label>NOTAS</label>

@@ -20,7 +20,8 @@ export class FretesService {
         
         const createFrete = await this.prisma.frete.create({
           data: {
-            peso_total: Number(data.peso_total),  // Convertendo para número
+            data_frete: new Date(data.data_frete),
+            peso_total: Number(data.peso_total),  
             frete_empresa: Number(data.frete_empresa),
             frete_saida_motorista: Number(data.frete_saida_motorista),
             quantidade_entregas: Number(data.quantidade_entregas),

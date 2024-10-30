@@ -15,6 +15,11 @@ export const Container = styled.header`
     justify-content: space-between;
 
     padding: 0 80px;
+    
+    > div{
+        display: flex;
+        align-items: center;
+    }
    `;
 
 export const Profile = styled(Link)`
@@ -54,4 +59,16 @@ export const Logout = styled.button`
         color: ${({theme})=> theme.COLORS.GRAY_100};
         font-size: 24px;
     }
+`;
+
+export const Navigation = styled(Link)`
+    border: none;
+    background: none;
+    
+    > svg {
+        color: ${({ theme }) => theme.COLORS.GRAY_100};
+        font-size: 24px;
+    }
+
+    margin-right: 16px;
 `;
