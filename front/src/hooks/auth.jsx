@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-
 import { api } from '../services/api'
 
 export const AuthContext = createContext({});
@@ -16,6 +15,7 @@ function AuthProvaider({children}){
 
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             setData({user,token})
+            
 
         }catch (error){
             if(error.response){
@@ -33,6 +33,7 @@ function AuthProvaider({children}){
         localStorage.removeItem("@ProjetoArmazem:user")
 
         setData({});
+       
     }
 
     async function updateProfile({user, avatarFile}){

@@ -1,13 +1,20 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { SignIn } from '../pages/SignIn';
+import { SignUp } from '../pages/SignUp';
+import { useAuth } from '../hooks/auth';
 
-import {SingIn} from '../pages/SingIn'
-import {SingUp} from '../pages/SingUp'
+export function AuthRoutes() {
+    const { user } = useAuth();
 
-export function AuthRoutes(){
-    return(
+    // Redireciona para home se já estiver logado
+    if (user) {
+        return <Navigate to="/home" />;
+    }
+
+    return (
         <Routes>
-            <Route path="/" element={<SingIn/>} />
-            <Route path="/register" element={<SingUp/>} />
+            <Route path="/" element={<SignIn />} />
+            <Route path="/register" element={<SignUp />} />
         </Routes>
-    )
+    );
 }

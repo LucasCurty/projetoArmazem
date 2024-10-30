@@ -40,5 +40,20 @@ export const HeaderDiv = styled.div`
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+`;
+
+export const DashboardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  > button {
+    padding: 8px 16px;
+    font-size: 14px;
+    min-width: 100px;
+    background-color: ${({ theme }) => theme.COLORS.ORANGE};
+    color: ${({ theme }) => theme.COLORS.WHITE};
+    border: none;
+    border-radius: 8px;
+  }
 `;

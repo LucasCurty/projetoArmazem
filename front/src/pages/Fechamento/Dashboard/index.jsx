@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Section } from '../../../Components/Section';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -22,13 +23,13 @@ ChartJS.register(
   Legend
 );
 
-import { api } from '../../../services/api';
-import { Container, ContentDiv, GridContainer } from './styles'
-import { Header } from '../../../Components/Header'; 
+import { api } from '../../../services/api'
+import {  ContentDiv, GridContainer, DashboardHeader } from './styles'
 
 export function Dashboard(){
   const [data, setData] = useState([]);
   const [dadosMes, setDadosMes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Função para formatar dados dos fretes
   function formatarDadosFretes(data) {
@@ -63,8 +64,8 @@ export function Dashboard(){
       await api.get('fretes')
         .then(response =>{ setData(response.data)})
         .then(async () => {
-          const dadosFormatadosFretes = await formatarDadosFretes(data);
-          setDadosMes(dadosFormatadosFretes);
+            const dadosFormatadosFretes = await formatarDadosFretes(data)
+            setDadosMes(dadosFormatadosFretes);
         })
         .catch(erro => {
           console.error('Erro ao buscar dados:', erro);
@@ -72,7 +73,7 @@ export function Dashboard(){
     }
 
     buscarDados();
-  }, []);
+  }, [loading]);
 
   // Configurações do gráfico
   const lineChartData = {
@@ -94,13 +95,18 @@ export function Dashboard(){
   };
 
   return (
-    <>
-      <Header />
-      <Container>
-        <h1>Dashboard de Fretes</h1>
-        <GridContainer>
-          <ContentDiv >
+    <Section title="Dashboard de Fretes">
+        <GridContainer 
+        >
+          <DashboardHeader> 
             <h2>Fretes por Mês</h2>
+            <button  
+              onClick={() => setLoading(!loading)} 
+          >
+              Atualizar Dados
+            </button>
+          </DashboardHeader>
+          <ContentDiv >
             <div style={{ height: '250px' }}>
               <Line 
                 data={lineChartData} 
@@ -116,7 +122,6 @@ export function Dashboard(){
             </div>
           </ContentDiv>
         </GridContainer>
-      </Container>
-    </>
+    </Section>
   );
 };

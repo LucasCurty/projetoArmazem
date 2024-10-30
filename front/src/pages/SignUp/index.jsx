@@ -9,14 +9,14 @@ import { Link, useNavigate } from "react-router-dom";
 import {Input} from '../../Components/Input' 
 import {Button} from '../../Components/Button' 
 
-export function SingUp(){
+export function SignUp(){
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
 
-    function handleSingUp(){
+    function handleSignUp(){
         if(!name || !email || !password){
           return alert("Preencha todos os campos!")
         }
@@ -60,7 +60,7 @@ export function SingUp(){
                     icon={FiLock}
                     onChange={e => setPassword(e.target.value)}
                 />
-                <Button title="Cadastrar" onClick={handleSingUp} />
+                <Button title="Cadastrar" onClick={handleSignUp} />
 
                 <Link to="/">Voltar para o login</Link>
             </Form>

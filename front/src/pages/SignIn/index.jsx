@@ -1,21 +1,27 @@
 import { useState } from 'react';
 import {Container, Form, Background} from './styles';
 import {FiLock, FiMail} from 'react-icons/fi'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {Input} from '../../Components/Input';
 import {Button} from '../../Components/Button';
 
 import { useAuth } from '../../hooks/auth';
 
-export function SingIn(){
+export function SignIn(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const { signIn } = useAuth();
 
-    function handleSingIn(){
-        signIn({email, password});
+    async function handleSignIn(){
+        try {
+            await signIn({email, password});
+            navigate("/home");
+        } catch (error) {
+            alert("Não foi possível fazer o login.");
+        }
     }
 
     return(
@@ -37,7 +43,7 @@ export function SingIn(){
                     icon={FiLock}
                     onChange={e => setPassword(e.target.value)}
                 />
-                <Button title="Entrar" onClick={handleSingIn}/>
+                <Button title="Entrar" onClick={handleSignIn}/>
 
                 <Link to="/register">Criar conta</Link>
             </Form>

@@ -2,15 +2,22 @@ import { RiShutDownLine, RiMoneyDollarCircleLine, RiHome2Line } from 'react-icon
 import { useAuth} from '../../hooks/auth'
 import { api } from '../../services/api';
 import avatarPlacehoder from '../../assets/perfil.svg'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { Container, Profile, Logout, Navigation } from "./styles";
+import { Container, Profile, Logout, Navigation} from "./styles";
 
 export function Header(){
     
     const {user, signOut} = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
     const avatarUrl = user.avatar ? `${api.defaults.baseURL}/files/${user.avatar}` : avatarPlacehoder;
+
+    const handleSignOut = () => {
+        navigate('/');
+        signOut();
+    }
+
     return(
     <Container>
         <Profile to="/profile">
@@ -25,12 +32,12 @@ export function Header(){
         </Profile>
 
         <div>
-            <Navigation to={location.pathname === '/analise' ? '/' : '/analise'}>
-                {location.pathname === '/analise' ? <RiHome2Line /> : <RiMoneyDollarCircleLine />}
+            <Navigation to={location.pathname === '/fechamento' ? '/home' : '/fechamento'}>
+                {location.pathname === '/fechamento' ? <RiHome2Line /> : <RiMoneyDollarCircleLine />}
             </Navigation>
 
         </div>
-            <Logout onClick={signOut}>
+            <Logout onClick={handleSignOut}>
                 <RiShutDownLine />
             </Logout>
 

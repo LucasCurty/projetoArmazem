@@ -50,6 +50,18 @@ export class FretesService {
         });
     }
 
+    async findOneFrete(id: number){
+        return await this.prisma.frete.findUnique({
+            where:{
+                id
+            },
+            include:{
+                notas: true,
+                motorista: true
+            }
+        });
+    }
+
     async updateFrete(freteId: number, data: FreteDTO){
         // Verifica se o frete existe
         const freteExist = await this.prisma.frete.findFirst({
