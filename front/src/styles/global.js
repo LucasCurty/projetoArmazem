@@ -46,3 +46,38 @@ export default createGlobalStyle`
 
 
 `;
+
+export const GlobalStyle = createGlobalStyle`
+  @media print {
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body * {
+      visibility: hidden;
+    }
+    
+    .romaneio-container, 
+    .romaneio-container * {
+      visibility: visible;
+    }
+    
+    .romaneio-container {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      padding: 20px;
+    }
+    
+    html {
+      -webkit-print-color-adjust: exact;
+    }
+    
+    body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+`;

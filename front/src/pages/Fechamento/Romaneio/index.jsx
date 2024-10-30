@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { Section } from "../../../Components/Section";
 import { FiPrinter } from 'react-icons/fi'
 import { api } from "../../../services/api";
+import { GlobalStyle } from '../../../styles/global';
 
 import { CustomSelect, RomaneioContainer, RomaneioHeader, InfoMotorista, NotasTable, TimeInput, TotalRow, DeclaracaoContainer, DeclaracaoTexto, ObservacaoContainer, ObservacaoTitulo, ObservacaoConteudo, PrintButton } from "./styles";
-import { GlobalStyle } from './styles';
 
 export function Romaneio() {
     const [numeroFrete, setNumeroFrete] = useState('');
