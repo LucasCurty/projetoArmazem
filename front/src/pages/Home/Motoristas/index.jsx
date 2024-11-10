@@ -326,10 +326,16 @@ export function Motoristas() {
                   onChange={handleTipoVeiculoChange}
                 >
                   <option value="">SELECIONE O TIPO DE VEÍCULO</option>
-                  <option value="van refrigerada">VAN REFRIGERADA</option>
+                  <option value="fiorino seca">FIORINO SECA</option>
+                  <option value="fiorino refrigerado">FIORINO REFRIGERADO</option>
                   <option value="van seca">VAN SECA</option>
-                  <option value="3/4 refrigerada">3/4 REFRIGERADA</option>
-                  <option value="3/4 seca">3/4 SECA</option>
+                  <option value="van refrigerada">VAN REFRIGERADA</option>
+                  <option value="3/4 seco">3/4 SECO</option>
+                  <option value="3/4 refrigerado">3/4 REFRIGERADO</option>
+                  <option value="toco seco">TOCO SECO</option>
+                  <option value="toco refrigerado">TOCO REFRIGERADO</option>
+                  <option value="truck seco">TRUCK SECO</option>
+                  <option value="truck refrigerado">TRUCK REFRIGERADO</option>
                 </Select>
                 {formSubmitted && errors.tipo_veiculo && <span className="error">{errors.tipo_veiculo}</span>}
 
@@ -384,8 +390,10 @@ export function Motoristas() {
                   onChange={handleTipoVeiculoChange}
                 >
                   <option value="">SELECIONE O TIPO DE VEÍCULO</option>
-                  <option value="van refrigerada">VAN REFRIGERADA</option>
+                  {/* Veículos Secos */}
+                  <option value="fiorino seca">FIORINO SECA</option>
                   <option value="van seca">VAN SECA</option>
+                  <option value="3/4 seco">3/4 SECO</option>
                   <option value="3/4 refrigerada">3/4 REFRIGERADA</option>
                   <option value="3/4 seca">3/4 SECA</option>
                 </Select>

@@ -25,11 +25,144 @@ export const Container = styled.div`
 `;
 
 export const ContentDiv = styled.div`
-  background-color: #FFFFFF;
+  background: #fff;
+  padding: 1.5rem;
   border-radius: 8px;
-  margin: 10px 0;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: black;
+
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  max-height: 2000px;
+  opacity: 1;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  overflow: hidden;
+
+  &.minimized {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  .info-mensal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .info-item {
+      padding: 1rem;
+      background: #f8f9fa;
+      color: black;
+      border-radius: 6px;
+      text-align: center;
+
+      h3 {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0;
+      }
+    }
+  }
+
+  .analytic-results {
+    .metrics-summary {
+      margin-bottom: 2rem;
+
+      h3 {
+        margin-bottom: 1rem;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        color: black;
+
+        .metric-item {
+          h4 {
+            margin-bottom: 1rem;
+          }
+
+          ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 0.5rem;
+              padding: 0.5rem;
+              background: #f8f9fa;
+              border-radius: 4px;
+
+              span {
+                font-weight: 500;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .vehicle-types {
+      h3 {
+        margin-bottom: 1rem;
+      }
+
+      .vehicle-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+
+        h4 {
+          margin-bottom: 1rem;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+
+          li {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .toggle-button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 10px;
+    
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .grafico-container {
+    width: 100%;
+  }
 `;
 
 export const HeaderDiv = styled.div`
@@ -38,22 +171,98 @@ export const HeaderDiv = styled.div`
 `;
 
 export const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
 `;
 
 export const DashboardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem;
+  background: #fff;
+  color: black;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
-  > button {
-    padding: 8px 16px;
+  h2 {
+    color: #333;
+    margin: 0;
+  }
+
+  .date-inputs {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 500;
+      }
+
+      input {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #0056b3;
+      }
+    }
+  }
+`;
+
+export const FilterContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+`;
+
+export const FilterGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
     font-size: 14px;
-    min-width: 100px;
-    background-color: ${({ theme }) => theme.COLORS.ORANGE};
-    color: ${({ theme }) => theme.COLORS.WHITE};
-    border: none;
+  }
+
+  input {
+    padding: 8px;
+    border: 1px solid #ddd;
     border-radius: 8px;
   }
 `;
+
+export const FilterButton = styled.button`
+  padding: 8px 16px;
+  font-size: 14px;
+  min-width: 100px;
+  background-color: #FF9000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
