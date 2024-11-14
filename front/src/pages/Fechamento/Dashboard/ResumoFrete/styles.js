@@ -26,7 +26,6 @@ export const DashboardHeader = styled.div`
   .date-inputs {
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
 
     div {
       display: flex;

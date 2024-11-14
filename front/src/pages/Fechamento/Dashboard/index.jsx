@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Section } from '../../../Components/Section';
 import { Line, Bar, Pie } from 'react-chartjs-2';
 import {Chart as ChartJS,CategoryScale,LinearScale,PointElement,LineElement,Title,Tooltip,Legend,ArcElement,} from 'chart.js';
-import { DashboardFrete } from './DashboardFrete';
+import { ResumoFrete } from './ResumoFrete';
 
 // Registrar componentes do Chart.js
 ChartJS.register(
@@ -130,16 +130,16 @@ export function Dashboard(){
       {
         label: 'Valor do Frete Empresa',
         data: dadosMes.map(d => d.valorFrete),
-        borderColor: 'rgb(75, 192, 192)',
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        borderColor: 'rgb(31, 184, 1)',
+        backgroundColor: 'rgba(174, 243, 153, 0.932)',
         tension: 0.1,
         fill: true
       },
       {
         label: 'Valor do Frete Motorista',
         data: dadosMes.map(d => d.valorMotorista),
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        borderColor: 'rgb(250, 0, 0)',
+        backgroundColor: 'rgba(187, 8, 8, 0.5)',
         tension: 0.1,
         fill: true
       }
@@ -276,7 +276,7 @@ export function Dashboard(){
         </ContentDiv>
       </GridContainer>
 
-      <DashboardFrete />
+      <ResumoFrete />
     </Section>
   );
 };

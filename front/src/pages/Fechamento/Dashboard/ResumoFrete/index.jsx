@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 import { ContentDiv, GridContainer, DashboardHeader } from './styles'
 import { api } from '../../../../services/api'
+import { Button } from '../../../../Components/Button';
 
-export function DashboardFrete() {
+
+export function ResumoFrete() {
   const [clienteSelecionado, setClienteSelecionado] = useState('todos');
+
+  //Resumo Frete
   const [numeroFrete, setNumeroFrete] = useState('');
+  const [searchUniqFrete, setSearchUniqFrete] = useState('')
+  
   const [isMinimized, setIsMinimized] = useState(true);
   const [dadosFrete, setDadosFrete] = useState({
     cidades: [],
@@ -23,12 +29,16 @@ export function DashboardFrete() {
     custoTotal: 0,
     clientesInfo: []
   });
+
+  async function hanldeSendApi(){
+    setSearchUniqFrete(numeroFrete)
+  }
   
   async function handleApi(dados){
     setDadosFrete({
       cidade:  new Set(dados.notas.map(item => item.cidade)),
       quantEntregas: new Set(dados.notas.map(item => item.cidade)).size,
-      quantNotas: dados.notas.map(item => item.length),
+      quantNotas: dados.notas.length,
       vlrMotorista:dados.frete_saida_motorista,
       descarga: 0, // ainda sem descarga
       pesoTotal: dados.peso_total,
@@ -52,8 +62,8 @@ export function DashboardFrete() {
     async function buscarDadosFrete() {
 
       try {
-        if(numeroFrete){
-          const response = await api.get(`fretes/${numeroFrete}`);
+        if(searchUniqFrete){
+          const response = await api.get(`fretes/${searchUniqFrete}`);
           handleApi(response.data);
           console.log("----------")
           console.log(response.data)
@@ -64,7 +74,7 @@ export function DashboardFrete() {
       }
     }
     buscarDadosFrete();
-  }, [numeroFrete]);
+  }, [searchUniqFrete]);
 
   return (
 
@@ -106,6 +116,7 @@ export function DashboardFrete() {
                   placeholder="Digite um número"
                 />
               </div>
+              <Button title="Pesquisar" onClick={hanldeSendApi} />
             
             </div>
       
@@ -120,6 +131,7 @@ export function DashboardFrete() {
               <div className="coluna-esquerda">
                 <div className="info-grupo">
                   <h3>FRETE</h3>
+                  <span>{dadosFrete.id}</span>
                   <div className="info-item">
                     <span>CIDADES</span>
                     <span>{dadosFrete.cidade}</span>
