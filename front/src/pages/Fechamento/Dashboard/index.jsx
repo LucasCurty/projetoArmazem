@@ -253,21 +253,21 @@ export function Dashboard(){
                 <div>
                   <h4>Veículos Secos</h4>
                   <ul>
-                    <li>FIORINO SECA: {dadosAnaliticos.veiculosSecos.fiorino}</li>
-                    <li>VAN SECA: {dadosAnaliticos.veiculosSecos.van}</li>
-                    <li>3/4 SECO: {dadosAnaliticos.veiculosSecos.tresQuartos}</li>
-                    <li>TOCO SECO: {dadosAnaliticos.veiculosSecos.toco}</li>
-                    <li>TRUCK SECO: {dadosAnaliticos.veiculosSecos.truck}</li>
+                    <li>FIORINO SECA: <span>{dadosAnaliticos.veiculosSecos.fiorino}</span></li>
+                    <li>VAN SECA: <span>{dadosAnaliticos.veiculosSecos.van}</span></li>
+                    <li>3/4 SECO: <span>{dadosAnaliticos.veiculosSecos.tresQuartos}</span></li>
+                    <li>TOCO SECO: <span>{dadosAnaliticos.veiculosSecos.toco}</span></li>
+                    <li>TRUCK SECO: <span>{dadosAnaliticos.veiculosSecos.truck}</span></li>
                   </ul>
                 </div>
                 <div>
                   <h4>Veículos Refrigerados</h4>
                   <ul>
-                    <li>FIORINO REFRIGERADO: {dadosAnaliticos.veiculosRefrigerados.fiorino}</li>
-                    <li>VAN REFRIGERADA: {dadosAnaliticos.veiculosRefrigerados.van}</li>
-                    <li>3/4 REFRIGERADO: {dadosAnaliticos.veiculosRefrigerados.tresQuartos}</li>
-                    <li>TOCO REFRIGERADO: {dadosAnaliticos.veiculosRefrigerados.toco}</li>
-                    <li>TRUCK REFRIGERADO: {dadosAnaliticos.veiculosRefrigerados.truck}</li>
+                    <li>FIORINO REFRIGERADO: <span>{dadosAnaliticos.veiculosRefrigerados.fiorino}</span></li>
+                    <li>VAN REFRIGERADA: <span>{dadosAnaliticos.veiculosRefrigerados.van}</span></li>
+                    <li>3/4 REFRIGERADO: <span>{dadosAnaliticos.veiculosRefrigerados.tresQuartos}</span></li>
+                    <li>TOCO REFRIGERADO: <span>{dadosAnaliticos.veiculosRefrigerados.toco}</span></li>
+                    <li>TRUCK REFRIGERADO: <span>{dadosAnaliticos.veiculosRefrigerados.truck}</span></li>
                   </ul>
                 </div>
               </div>

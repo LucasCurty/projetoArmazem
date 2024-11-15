@@ -50,7 +50,7 @@ export function ResumoFrete() {
       valorKmExtra: 50,
       fatTotal: 0,
       custoTotal: 0,
-      clientesInfo: dados.notas.map(nota => nota.client)
+      clientesInfo: dados.notas
 
     })
 
@@ -65,8 +65,6 @@ export function ResumoFrete() {
         if(searchUniqFrete){
           const response = await api.get(`fretes/${searchUniqFrete}`);
           handleApi(response.data);
-          console.log("----------")
-          console.log(response.data)
         }
         
       } catch (error) {
@@ -204,14 +202,23 @@ export function ResumoFrete() {
                   <tr>
                     <th>CLIENTE</th>
                     <th>PESO</th>
-                    <th>VALOR FATURADO</th>
                     <th>VALOR NF</th>
                     <th>CUSTO CLIENTE</th>
                     <th>MARGEM</th>
                   </tr>
                 </thead>
                 <tbody>
-                  
+                  {
+                    dadosFrete.clientesInfo.map((item) => (
+                      <tr>
+                        <td>{item.client}</td>
+                        <td>{item.peso}</td>
+                        <td>{item.valor_nota}</td>
+                        <td>{item.valor_nota / item.peso}</td>
+                        <td>{item.valor_nota / item.peso}</td>
+                      </tr>))
+                  }
+                  {console.log(dadosFrete.clientesInfo)}
                 </tbody>
               </table>
             </div>

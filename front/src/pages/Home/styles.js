@@ -1,51 +1,49 @@
 import styled from "styled-components";
+
 import { Link } from "react-router-dom";
-import { FiPlus } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 
 
 export const Container = styled.div`
     width: 100%;
-    height: 100vh;
+    height: 88vh;
 
     display: flex;
     
 `;
 
 export const ContentMenu = styled.div`
-    width: 100%;
+    width: 20%;
+    height: 88vh;
+    max-width: 300px;
     background:  ${({theme}) => theme.COLORS.BACKGROUND_900};
+    display: flex;  
+    flex-direction: column;
+    justify-content: space-between;
     
 `;
 export const divIcon = styled.div`
-    width: 100%;
-    height: 100%;
+position: relative;
 `;
-export const IconButton = styled(FiPlus)`
+
+export const IconButtonLeft = styled(FiArrowLeft)`
     cursor: pointer;
+    font-size: 1.6rem;
+    position: absolute;
+    top: 50%;
 `;
 
-export const Brand = styled.div`
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border-bottom-width: 0px;
-    border-bottom-style: solid;
-    border-bottom-color: 1 ${({theme}) => theme.COLORS.BACKGROUND_700};
-
-
-    > h1{
-        font-size: 24px;
-        color:  ${({theme}) => theme.COLORS.ORANGE};
-    }
-    `;
-
+export const IconButtonRight = styled(FiArrowRight)`
+    cursor: pointer;
+    font-size: 1.6rem;
+    position: absolute;
+    top: 50%;
+`;
 
 export const Content = styled.div`
-    padding: 0 64px;
+    width: 100%;
+    padding: 0 2rem;
     overflow-y: auto;
-    font-size: .8rem;
 `;
 
 export const NewNote = styled(Link)`

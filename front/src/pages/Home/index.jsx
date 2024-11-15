@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
-import { Container, ContentMenu, Brand, Content, NewNote, IconButton ,divIcon} from './styles';
+import { Container, ContentMenu, Content, NewNote, IconButtonLeft, IconButtonRight, divIcon} from './styles';
 import { Link } from "react-router-dom";
 
 import { Header } from '../../Components/Header';
@@ -32,10 +32,6 @@ export function Home(){
                 <>
             {isMenuVisible && (
             <ContentMenu>
-            <Brand>
-                <h1>Operação Lucio</h1>
-                
-            </Brand>
                 <Menu >
                     <Link>
                         <ButtonText  
@@ -66,14 +62,15 @@ export function Home(){
                             />
                     </Link>
                 </Menu>
-            <NewNote to="/new">
-                <FiPlus />
-                Cadastrar Notas
-                </NewNote>
+                <NewNote to="/new"><FiPlus />Cadastrar Notas</NewNote>
             </ContentMenu>
             )}
             <divIcon>
-                <IconButton onClick={toggleMenuVisibility} />
+                {isMenuVisible ?
+                    <IconButtonLeft onClick={toggleMenuVisibility} />
+                    : 
+                    <IconButtonRight onClick={toggleMenuVisibility} />
+                }
             </divIcon>
                 </>
             <Content>

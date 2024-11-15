@@ -12,6 +12,7 @@ export const MenuStyled = styled.nav`
     flex-direction: column;
 
     > a{
+        font-size: 1.2rem;
         margin-bottom: 24px;
         color: white;
         

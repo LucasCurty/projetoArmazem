@@ -101,7 +101,8 @@ export const ContentDiv = styled.div`
               justify-content: space-between;
               margin-bottom: 0.5rem;
               padding: 0.5rem;
-              background: #f8f9fa;
+              color: white;
+              background: ${({ theme }) => theme.COLORS.BACKGROUND_700} ;
               border-radius: 4px;
 
               span {
@@ -132,9 +133,16 @@ export const ContentDiv = styled.div`
           padding: 0;
 
           li {
+            display: flex;
+            justify-content: space-between;
             padding: 0.5rem;
             margin-bottom: 0.5rem;
             border-radius: 4px;
+            color: white;
+            background: ${({ theme }) => theme.COLORS.BACKGROUND_700} ;
+            > span {
+              font-weight: 500;
+            }
           }
         }
       }
@@ -182,8 +190,7 @@ export const DashboardHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #fff;
-  color: black;
+  background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
@@ -191,6 +198,20 @@ export const DashboardHeader = styled.div`
     color: #333;
     margin: 0;
   }
+  
+  button {
+      padding: 0.5rem 1rem;
+      background: ${({ theme }) => theme.COLORS.ORANGE};
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: ${({ theme }) => theme.COLORS.BACKGROUND_900};
+      }
+    }
 
   .date-inputs {
     display: flex;
@@ -213,19 +234,6 @@ export const DashboardHeader = styled.div`
       }
     }
 
-    button {
-      padding: 0.5rem 1rem;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover {
-        background: #0056b3;
-      }
-    }
   }
 `;
 
