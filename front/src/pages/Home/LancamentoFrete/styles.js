@@ -2,29 +2,50 @@ import styled from "styled-components";
 
 
 export const Frete = styled.main`
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     justify-content: space-between;
     padding-bottom: 1rem;
+    
     > div, label{
+      font-size: 1rem;
       margin-bottom: 10px;
     }
     > .info{
         display: flex;
         flex-direction: row;
     }
+    input[type=number]::-webkit-inner-spin-button { 
+          -webkit-appearance: none;
+        }
+        input[type=number] { 
+          -moz-appearance: textfield;
+          appearance: textfield;
+        }
 
     > .data{
         padding-right: 1rem;
+        
         > label{
           color: ${({theme})=> theme.COLORS.ORANGE};
         }
         input[type=date]{
           margin-top: 10px;
           background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
-          color: white;
           border: none;
           padding: 5px 10px;
+          color: white;
         }
+       
+    }
+
+    button{
+      grid-column: 4;
+      color: white;
+      opacity: 0.8;
+    }
+    button:hover{
+      opacity: 1;
     }
 
 `;

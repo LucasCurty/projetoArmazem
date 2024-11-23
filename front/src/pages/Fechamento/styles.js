@@ -28,17 +28,22 @@ export const divIcon = styled.div`
 position: relative;
 `;
 
-export const IconButtonL = styled(FiArrowLeft)`
+export const IconButtonLeft = styled(FiArrowLeft)`
     cursor: pointer;
     font-size: 1.6rem;
     position: absolute;
     top: 50%;
+    background-color: ${({theme}) => theme.COLORS.ORANGE};
+    border-radius: 50%;
 `;
-export const IconButtonR = styled(FiArrowRight)`
+
+export const IconButtonRight = styled(FiArrowRight)`
     cursor: pointer;
     font-size: 1.6rem;
     position: absolute;
     top: 50%;
+    background-color: ${({theme}) => theme.COLORS.ORANGE};
+    border-radius: 50%;
 `;
 
 export const Content = styled.div`

@@ -187,6 +187,7 @@ export function LancamentoFrete(){
                     <input type="number" placeholder="Insira o valor" value={freteSaidaMoto} onChange={e => setFreteSaidaMoto(e.target.value)}/>
                   </div>
                 </InsertValues>
+                <Button onClick={addFrete} title="Enviar Frete" />
             </Frete>
         </Section>
         <Section title="Informações do frete">
@@ -257,10 +258,7 @@ export function LancamentoFrete(){
             </Labels>
           </LancarFrete>
         </Section>
-        <Button 
-          onClick={addFrete} 
-          title="Enviar Frete"
-        />
+        
       </main>
     );
 }

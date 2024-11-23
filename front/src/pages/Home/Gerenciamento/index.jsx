@@ -225,19 +225,21 @@ export function Gerenciamento(){
                     <td className='buttns'>
                         { editingFrete !== frete ?
                           <button onClick={ () => handleEditFrete(frete)}>
-                            <FiEdit/>
+                            <FiEdit />
                           </button>
                           :
                           <div>
                             <button className='enviar' onClick={ () => handleSendFreteEdited(frete)}>
                               <FiCheckSquare />
                             </button>
-                          <button className='excluir' onClick={() =>      handleDeleteFrete(frete)}>
-                              <FiTrash />
+                            <button className='excluir' onClick={() =>      handleDeleteFrete(frete)}>
+                                <FiTrash />
                             </button>
                           </div>
                         
-                        }
+                      }
+                      </td>
+                        {/*   MODAL  */}
                         {
                           isDeleteModalOpen && (
                             <Modal
@@ -260,7 +262,7 @@ export function Gerenciamento(){
                             </ButtonContainer>
                           </Modal>
                         )}
-                        </td>
+                        
                     <th>{frete.id}</th>
                     <th>
                       {`${String(frete.data_frete).split('T')[0].split('-')[2]} /
@@ -330,11 +332,13 @@ export function Gerenciamento(){
                           ))}
                         </select>
                       }</th>
-                    <th>{
+                    <th>
+                      {
                         editingFrete !== frete ?
                         (frete.motorista?.name || "Sem nome") :
                         motoristas.find(m => m.placa === placaEdit)?.name || "Selecione uma placa"
-                      }</th>
+                      }
+                    </th>
                   </tr>
                   )) 
                 }

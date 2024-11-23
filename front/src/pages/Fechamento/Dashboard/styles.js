@@ -25,7 +25,7 @@ export const Container = styled.div`
 `;
 
 export const ContentDiv = styled.div`
-  background: #fff;
+   background-color: ${({ theme }) => theme.COLORS.WHITE};
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -190,14 +190,15 @@ export const DashboardHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.COLORS.BACKGROUND_700};
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
   h2 {
-    color: #333;
+    color: white;
     margin: 0;
   }
+ 
   
   button {
       padding: 0.5rem 1rem;
@@ -225,6 +226,7 @@ export const DashboardHeader = styled.div`
 
       label {
         font-weight: 500;
+        font-size: 1rem;
       }
 
       input {
@@ -232,6 +234,11 @@ export const DashboardHeader = styled.div`
         border: 1px solid #ddd;
         border-radius: 4px;
       }
+      select{
+        padding: 0.5rem;
+        border: none;
+        border-radius: 4px;
+  }
     }
 
   }

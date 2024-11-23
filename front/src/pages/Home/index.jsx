@@ -67,9 +67,9 @@ export function Home(){
             )}
             <divIcon>
                 {isMenuVisible ?
-                    <IconButtonLeft onClick={toggleMenuVisibility} />
+                    <IconButtonLeft setando onClick={toggleMenuVisibility} />
                     : 
-                    <IconButtonRight onClick={toggleMenuVisibility} />
+                    <IconButtonRight setando onClick={toggleMenuVisibility} />
                 }
             </divIcon>
                 </>

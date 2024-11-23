@@ -5,7 +5,7 @@ import { ButtonText } from '../../Components/ButtonText';
 import { Dashboard } from "./Dashboard";
 import { Romaneio } from "./Romaneio";
 import { Menu } from "../../Components/Menu";
-import { Container, Content, IconButtonL, IconButtonR, ContentMenu} from './styles';
+import { Container, Content, IconButtonLeft, IconButtonRight, ContentMenu} from './styles';
 
 
 export function Fechamento(){
@@ -48,9 +48,9 @@ export function Fechamento(){
             )}
             <divIcon>
             {isMenuVisible ?
-                <IconButtonL onClick={toggleMenuVisibility} />
+                <IconButtonLeft onClick={toggleMenuVisibility} />
                 : 
-                <IconButtonR onClick={toggleMenuVisibility} />
+                <IconButtonRight onClick={toggleMenuVisibility} />
             }
             </divIcon>
 

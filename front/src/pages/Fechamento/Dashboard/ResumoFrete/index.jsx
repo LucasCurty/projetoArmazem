@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ContentDiv, GridContainer, DashboardHeader } from './styles'
 import { api } from '../../../../services/api'
-import { Button } from '../../../../Components/Button';
 
 
 export function ResumoFrete() {
@@ -46,7 +45,7 @@ export function ResumoFrete() {
       motorista: dados.motorista.name,
       placa: dados.motorista.placa,
       tipoVeiculo: dados.motorista.tipo_veiculo,
-      kmExtra: dados.km_inicial - dados.km_final,
+      kmExtra: dados.km_final - dados.km_inicial,
       valorKmExtra: 50,
       fatTotal: 0,
       custoTotal: 0,
@@ -79,18 +78,8 @@ export function ResumoFrete() {
       <GridContainer>
         <DashboardHeader>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2>Resumo Frete</h2>
-            <button 
-              onClick={() => setIsMinimized(!isMinimized)}
-              style={{ 
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1.2rem'
-              }}
-            >
-              {isMinimized ? '▼' : '▲'}
-            </button>
+            <h2>Resumo por Frete</h2>
+            
           </div>
           
           <div className="date-inputs">
@@ -112,11 +101,13 @@ export function ResumoFrete() {
                   type="number"
                   onChange={(e) => setNumeroFrete(e.target.value)}
                   placeholder="Digite um número"
-                />
+                  />
               </div>
-              <Button title="Pesquisar" onClick={hanldeSendApi} />
-            
-            </div>
+          </div>
+          <button title="Pesquisar" onClick={hanldeSendApi}>Pesquisar</button>
+          <button onClick={() => setIsMinimized(!isMinimized)}>
+            {isMinimized ? '▼' : '▲'}
+          </button>
       
         
         </DashboardHeader>
@@ -179,7 +170,8 @@ export function ResumoFrete() {
                   </div>
                   <div className="info-item">
                     <span>KM EXTRA</span>
-                    <span>R$ {dadosFrete.kmExtra}</span>
+                    <span>{dadosFrete.kmExtra} KM</span>
+                    {console.log(dadosFrete)}
                   </div>
                   <div className="info-item">
                     <span>VALOR KM EXTRA</span>
@@ -208,17 +200,17 @@ export function ResumoFrete() {
                   </tr>
                 </thead>
                 <tbody>
+                  {console.log(dadosFrete)}
                   {
-                    dadosFrete.clientesInfo.map((item) => (
+                    dadosFrete.clientesInfo.map(item => (
                       <tr>
                         <td>{item.client}</td>
-                        <td>{item.peso}</td>
-                        <td>{item.valor_nota}</td>
-                        <td>{item.valor_nota / item.peso}</td>
-                        <td>{item.valor_nota / item.peso}</td>
+                        <td>{item.peso} KG</td>
+                        <td>{item.valor_nota} R$</td>
+                        <td>{(item.valor_nota / item.peso).toFixed(2)} R$</td>
+                        <td>{(item.valor_nota / item.peso).toFixed(2)}%</td>
                       </tr>))
                   }
-                  {console.log(dadosFrete.clientesInfo)}
                 </tbody>
               </table>
             </div>

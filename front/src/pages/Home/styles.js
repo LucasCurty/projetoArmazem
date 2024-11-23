@@ -23,7 +23,7 @@ export const ContentMenu = styled.div`
     
 `;
 export const divIcon = styled.div`
-position: relative;
+    position: relative;
 `;
 
 export const IconButtonLeft = styled(FiArrowLeft)`
@@ -31,6 +31,8 @@ export const IconButtonLeft = styled(FiArrowLeft)`
     font-size: 1.6rem;
     position: absolute;
     top: 50%;
+    background-color: ${({theme}) => theme.COLORS.ORANGE};
+    border-radius: 50%;
 `;
 
 export const IconButtonRight = styled(FiArrowRight)`
@@ -38,6 +40,8 @@ export const IconButtonRight = styled(FiArrowRight)`
     font-size: 1.6rem;
     position: absolute;
     top: 50%;
+    background-color: ${({theme}) => theme.COLORS.ORANGE};
+    border-radius: 50%;
 `;
 
 export const Content = styled.div`

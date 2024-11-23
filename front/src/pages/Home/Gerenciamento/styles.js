@@ -5,6 +5,8 @@ export const Table = styled.table`
     border: 2px solid rgb(140 140 140);
     letter-spacing: 1px;
     width: 100%;
+
+    box-sizing: border-box;
     
     thead {
         background-color: ${({theme})=> theme.COLORS.ORANGE};
@@ -18,7 +20,10 @@ export const Table = styled.table`
     th input{
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
         border: 1px solid ${({theme})=> theme.COLORS.ORANGE};
-        color: ${({theme})=> theme.COLORS.WHITE};
+        color: black;
+        width: 50%;
+        border-radius: 5px;
+        border: none;
 
         &::placeholder {
             color: ${({theme})=> theme.COLORS.WHITE};
@@ -32,23 +37,31 @@ export const Table = styled.table`
         background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
         color: ${({theme})=> theme.COLORS.WHITE};
         padding-left: 10px;
+        width: 70%;
+        
+
     }
 
     tbody {
+      background-color: #fff;
+      color: black;
         tr:hover {
-            background-color: ${({theme})=> theme.COLORS.BACKGROUND_900};
+            background-color: ${({theme})=> theme.COLORS.BACKGROUND_700};
+            color: white;
         }
 
         span:hover {
             cursor: pointer;
-        }
+            
+          }
 
         .buttns {
             display: flex;
             gap: 12px;
             justify-content: flex-start;
             align-items: center;
-            min-width: 80px;
+            color: black;
+
             >div {
                 > button {
                 background: transparent;
@@ -60,9 +73,7 @@ export const Table = styled.table`
                > svg {
                     width: 20px;
                     height: 20px;
-                    color: ${({theme}) => theme.COLORS.WHITE};
-                    
-                    
+                    color: black;
                     &:hover {
                         opacity: 0.7;
                     }
@@ -79,11 +90,10 @@ export const Table = styled.table`
                > svg {
                     width: 20px;
                     height: 20px;
-                    color: ${({theme}) => theme.COLORS.WHITE};
-                    
-                    
+
                     &:hover {
                         opacity: 0.7;
+                        color: white;
                     }
                 }
             }

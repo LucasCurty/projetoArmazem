@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.COLORS.BACKGROUND_800};
+  color: white;
   border-radius: 8px;
   padding: 24px;
   max-width: 500px;
