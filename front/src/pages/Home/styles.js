@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 
 
+
+
 export const Container = styled.div`
     width: 100%;
     height: 88vh;
@@ -20,9 +22,21 @@ export const ContentMenu = styled.div`
     display: flex;  
     flex-direction: column;
     justify-content: space-between;
+    display: ${props => props.isOpen ? 'flex' : 'none'};   
+    animation: showMenu 800ms ease;    
     
+    @keyframes showMenu {
+    from {
+        opacity: 0;
+        width: 0%;
+    }
+    to {
+        opacity: 1;
+        width: 30%;;
+    }
+}
 `;
-export const divIcon = styled.div`
+export const DivIcon = styled.div`
     position: relative;
 `;
 

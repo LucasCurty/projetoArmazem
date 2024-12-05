@@ -17,8 +17,10 @@ export function SignIn(){
 
     async function handleSignIn(){
         try {
-            await signIn({email, password});
-            navigate("/home");
+            const result = await signIn({email, password});
+            if (result) {
+                navigate("/home");
+            }
         } catch (error) {
             alert("Não foi possível fazer o login.");
         }

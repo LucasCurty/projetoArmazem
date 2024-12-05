@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
-import { Container, ContentMenu, Content, NewNote, IconButtonLeft, IconButtonRight, divIcon} from './styles';
+import { Container, ContentMenu, Content, NewNote, IconButtonLeft, IconButtonRight, DivIcon} from './styles';
 import { Link } from "react-router-dom";
 
 import { Header } from '../../Components/Header';
@@ -30,8 +30,8 @@ export function Home(){
         <Header />
         <Container>
                 <>
-            {isMenuVisible && (
-            <ContentMenu>
+            <ContentMenu isOpen={isMenuVisible}>
+
                 <Menu >
                     <Link>
                         <ButtonText  
@@ -64,14 +64,14 @@ export function Home(){
                 </Menu>
                 <NewNote to="/new"><FiPlus />Cadastrar Notas</NewNote>
             </ContentMenu>
-            )}
-            <divIcon>
+            
+            <DivIcon>
                 {isMenuVisible ?
                     <IconButtonLeft setando onClick={toggleMenuVisibility} />
                     : 
                     <IconButtonRight setando onClick={toggleMenuVisibility} />
                 }
-            </divIcon>
+            </DivIcon>
                 </>
             <Content>
                 {sectionActive === "Lançamento de Frete" && <LancamentoFrete />}

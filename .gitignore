@@ -3,6 +3,7 @@
 /node_modules
 /build
 front/node_modules
+front/dist
 
 
 # prisma
