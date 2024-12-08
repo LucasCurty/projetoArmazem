@@ -1,7 +1,6 @@
 # Projeto Armazem
-> Um projeto de gerenciamento de fluxo de trabalho, operação do armazem: analísta Lucio
+> Um projeto de gerenciamento de fluxo de trabalho logistica de armazenagem e frete
 
-### Projeto ainda em construlção 🚧
 > Algumas apresentações do projeto. 
 
 - Lançamento de Fretes
