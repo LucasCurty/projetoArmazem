@@ -5,10 +5,19 @@
 > Algumas apresentações do projeto. 
 
 - Lançamento de Fretes
-![Lançamento de Frete](https://github.com/user-attachments/assets/cc1f4cdf-833a-4322-9808-4b7cb394a457)
+![lancamento](https://github.com/user-attachments/assets/f1b80842-1820-4f0e-9412-7bb13e0df031)
+
 - Gerenciamento de Fretes 
-![gerenciamento](https://github.com/user-attachments/assets/d70eaa98-2459-4bf8-940c-7c155570a41a)
+![gerencimento](https://github.com/user-attachments/assets/7bb7053f-4583-465b-9e79-244041571aea)
+
 - Cadastros de notas
-![cadastrar notas via xml](https://github.com/user-attachments/assets/792fef19-d59a-4f92-823b-6213d976d97e)
-- Notas Fiscais
-![NotasFiscais](https://github.com/user-attachments/assets/0449a6bf-4ff7-4b74-871c-ec073aea6f52)
+![cadastro notas](https://github.com/user-attachments/assets/2db98294-5526-4369-9121-4552e1a5c0a9)
+
+- Resumo por perido
+![resumo mesal](https://github.com/user-attachments/assets/b3d8e117-942f-409d-a1e0-b8f420fb3035)
+
+-Resumo por frete
+![resumo por frete](https://github.com/user-attachments/assets/dfde25ac-2442-47f1-b033-f755f4874548)
+
+- Romaneio de carga - entrega
+  ![romaneio](https://github.com/user-attachments/assets/9ddb1b57-cb09-4ce7-aebb-7260060d1b3f)
